@@ -1,37 +1,26 @@
+import 'package:audio_app_2/components/action_buttons/completed_button.dart';
+import 'package:audio_app_2/components/action_buttons/download_button.dart';
+import 'package:audio_app_2/components/action_buttons/info_button.dart';
+import 'package:audio_app_2/components/action_buttons/like_button.dart';
+import 'package:audio_app_2/page_manager.dart';
 import 'package:flutter/material.dart';
 
 class ActionButtons extends StatelessWidget {
-  const ActionButtons({super.key});
+  const ActionButtons({super.key, required this.pageManager});
+  final PageManager pageManager;
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 15),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _buildIconBox('assets/images/bm.png'),
-          const SizedBox(width: 12),
-          _buildIconBox('assets/images/like.png'),
-          const SizedBox(width: 12),
-          _buildIconBox('assets/images/download.png'),
-          const SizedBox(width: 12),
-          _buildIconBox('assets/images/bm2.png'),
+          InfoButton(pageManager: pageManager),
+          LikeButton(pageManager: pageManager),
+          DownloadButton(),
+          CompletedButton(),
         ],
-      ),
-    );
-  }
-
-  Widget _buildIconBox(String path) {
-    return Container(
-      width: 88,
-      height: 60,
-      decoration: BoxDecoration(
-        border: Border.all(width: 2, color: Colors.grey[200]!),
-        borderRadius: BorderRadius.circular(15),
-      ),
-      child: IconButton(
-        onPressed: () {},
-        icon: Image.asset(path, width: 26, height: 26),
       ),
     );
   }

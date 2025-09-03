@@ -40,6 +40,8 @@ class PageManager {
         startTime: "06:00",
         duration: Duration.zero,
         audioPath: 'assets/audio/good.mp3',
+        lessonDescription:
+            '12-р сарын 6-ны еглее 04 цагт хийнэ, орой 18 цагаас давтаж хийнэ.',
       ),
       AudioLesson(
         title: "Бясалгал 2",
@@ -47,6 +49,8 @@ class PageManager {
         startTime: "07:00",
         duration: Duration.zero,
         audioPath: 'assets/audio/study.mp3',
+        lessonDescription:
+            '12-р сарын 8-ны еглее 04 цагт хийнэ, орой 20 цагаас давтаж хийнэ.',
       ),
     ];
 
@@ -117,6 +121,8 @@ class PageManager {
           startTime: lesson.startTime,
           duration: safeDuration,
           audioPath: lesson.audioPath,
+          lessonDescription: lesson.lessonDescription,
+          isLiked: lesson.isLiked,
         );
       }
     });
@@ -223,7 +229,11 @@ class PageManager {
   }
 
   bool get isPlaying {
-    // AudioPlayer-ийн playing state-ийг буцаах
     return _audioPlayer.playing;
+  }
+
+  void playLessonAt(int index) {
+    _audioPlayer.seek(Duration.zero, index: index);
+    play();
   }
 }

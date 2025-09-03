@@ -15,9 +15,8 @@ class AudioControlButtons extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 60,
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceAround,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           PreviousSongButton(pageManager: pageManager),
           SpeedButton(pageManager: pageManager),
