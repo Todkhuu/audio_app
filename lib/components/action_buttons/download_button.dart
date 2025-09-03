@@ -1,7 +1,15 @@
+import 'package:audio_app_2/models/audio_lesson.dart';
+import 'package:audio_app_2/managers/page_manager.dart';
 import 'package:flutter/material.dart';
 
 class DownloadButton extends StatelessWidget {
-  const DownloadButton({super.key});
+  final PageManager pageManager;
+  final AudioLesson lesson;
+  const DownloadButton({
+    super.key,
+    required this.pageManager,
+    required this.lesson,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +21,12 @@ class DownloadButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(15),
       ),
       child: IconButton(
-        onPressed: () {}, // энд callback ашиглана
+        onPressed: () async {
+          await pageManager.downloadAndPlay(lesson);
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text("Аудио татагдаж хадгалагдлаа ✅")),
+          );
+        },
         icon: Image.asset('assets/images/download.png', width: 26, height: 26),
       ),
     );

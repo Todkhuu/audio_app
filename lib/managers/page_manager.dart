@@ -1,18 +1,33 @@
+import 'dart:convert';
+
 import 'package:audio_app_2/models/audio_lesson.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
-import 'notifiers/play_button_notifier.dart';
-import 'notifiers/progress_notifier.dart';
-import 'notifiers/repeat_button_notifier.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import '../notifiers/play_button_notifier.dart';
+import '../notifiers/progress_notifier.dart';
+import '../notifiers/repeat_button_notifier.dart';
+import 'dart:io';
+import 'package:flutter/services.dart';
+import 'package:path_provider/path_provider.dart';
 
 class PageManager {
+  // <-- 1. State & Notifiers – UI update хийх. -->
+
+  // Одоо тоглож буй хичээл
   final currentLessonNotifier = ValueNotifier<AudioLesson?>(null);
+  // Playlist-д байгаа бүх хичээлүүдийн жагсаалт.
   final playlistNotifier = ValueNotifier<List<AudioLesson>>([]);
+  // Audio progress bar-ийн мэдээлэл (одоо, buffered, нийт хугацаа).
   final progressNotifier = ProgressNotifier();
+  // Дахин тоглох товчны state (off, нэг дуу, playlist).
   final repeatButtonNotifier = RepeatButtonNotifier();
+  // Playlist-ийн эх, сүүлд тоглож буй эсэхийг тэмдэглэнэ.
   final isFirstSongNotifier = ValueNotifier<bool>(true);
-  final playButtonNotifier = PlayButtonNotifier();
   final isLastSongNotifier = ValueNotifier<bool>(true);
+  // Тоглох/Pause/Loading товчны state.
+  final playButtonNotifier = PlayButtonNotifier();
+  // Тоглуулах хурд (1x, 2x, 3x).
   final speedNotifier = ValueNotifier<double>(1.0);
 
   late AudioPlayer _audioPlayer;
@@ -22,6 +37,8 @@ class PageManager {
     _init();
   }
 
+  // <-- 2. Init & Playlist – AudioPlayer initialize, playlist set. -->
+  // AudioPlayer үүсгэх, playlist set хийх, listener-уудыг ажиллуулах.
   void _init() async {
     _audioPlayer = AudioPlayer();
     _setInitialPlaylist();
@@ -32,6 +49,7 @@ class PageManager {
     _listenForChangesInSequenceState();
   }
 
+  // tag: lesson – AudioSource-д lesson объект холбож, дараа нь UI update-д ашиглана.
   Future<void> _setInitialPlaylist() async {
     final lessons = [
       AudioLesson(
@@ -63,7 +81,10 @@ class PageManager {
     await _audioPlayer.setAudioSource(_playlist);
   }
 
+  // <-- 3. Listeners – Player state, position, buffer, duration, sequence track update. -->
+
   void _listenForChangesInPlayerState() {
+    // Audio-ийн state-ийг UI-тэй синхрончилно.
     _audioPlayer.playerStateStream.listen((playerState) {
       final isPlaying = playerState.playing;
       final processingState = playerState.processingState;
@@ -82,6 +103,7 @@ class PageManager {
   }
 
   void _listenForChangesInPlayerPosition() {
+    // Одоогийн тоглосон хугацаа
     _audioPlayer.positionStream.listen((position) {
       final oldState = progressNotifier.value;
       progressNotifier.value = ProgressBarState(
@@ -93,6 +115,7 @@ class PageManager {
   }
 
   void _listenForChangesInBufferedPosition() {
+    // Buffer
     _audioPlayer.bufferedPositionStream.listen((bufferedPosition) {
       final oldState = progressNotifier.value;
       progressNotifier.value = ProgressBarState(
@@ -104,6 +127,7 @@ class PageManager {
   }
 
   void _listenForChangesInTotalDuration() {
+    // Total duration
     _audioPlayer.durationStream.listen((totalDuration) {
       final oldState = progressNotifier.value;
       final safeDuration = totalDuration ?? Duration.zero;
@@ -112,7 +136,6 @@ class PageManager {
         buffered: oldState.buffered,
         total: totalDuration ?? Duration.zero,
       );
-      // duration-г одоогийн хичээл дээр update хийх
       final lesson = currentLessonNotifier.value;
       if (lesson != null) {
         currentLessonNotifier.value = AudioLesson(
@@ -129,18 +152,16 @@ class PageManager {
   }
 
   void _listenForChangesInSequenceState() {
+    // Playlist-д тоглож буй дууг track хийж, Previous/Next button update.
     _audioPlayer.sequenceStateStream.listen((sequenceState) {
       final currentItem = sequenceState.currentSource;
       final lesson = currentItem?.tag as AudioLesson?;
       currentLessonNotifier.value = lesson;
-
-      // update playlist
       final playlist = sequenceState.effectiveSequence
           .map((item) => item.tag as AudioLesson)
           .toList();
       playlistNotifier.value = playlist;
 
-      // update previous and next buttons
       if (playlist.isEmpty || currentItem == null) {
         isFirstSongNotifier.value = true;
         isLastSongNotifier.value = true;
@@ -150,6 +171,8 @@ class PageManager {
       }
     });
   }
+
+  // <-- 4. Controls – Play/Pause, Next/Prev, Seek, Speed, Repeat, Download & Play. -->
 
   void play() async {
     _audioPlayer.play();
@@ -167,6 +190,7 @@ class PageManager {
     _audioPlayer.dispose();
   }
 
+  // Loop mode тохируулах
   void onRepeatButtonPressed() {
     repeatButtonNotifier.nextState();
     switch (repeatButtonNotifier.value) {
@@ -189,6 +213,7 @@ class PageManager {
     _audioPlayer.seekToNext();
   }
 
+  // // 1x → 2x → 3x → 1x
   void cycleSpeed() {
     double newSpeed;
     if (speedNotifier.value == 1.0) {
@@ -202,6 +227,7 @@ class PageManager {
     _audioPlayer.setSpeed(newSpeed);
   }
 
+  // Өмнөх 5 секунд рүү
   void rewind5Seconds() {
     final currentPosition = _audioPlayer.position;
     Duration newPosition;
@@ -215,6 +241,7 @@ class PageManager {
     _audioPlayer.seek(newPosition);
   }
 
+  // Дараах 10 секунд рүү
   void forward10Seconds() {
     final currentPosition = _audioPlayer.position;
     final totalDuration = _audioPlayer.duration ?? Duration.zero;
@@ -235,5 +262,41 @@ class PageManager {
   void playLessonAt(int index) {
     _audioPlayer.seek(Duration.zero, index: index);
     play();
+  }
+
+  Future<void> downloadAndPlay(AudioLesson lesson) async {
+    final dir = await getApplicationDocumentsDirectory();
+    final file = File('${dir.path}/${lesson.lessonNumber}.mp3');
+
+    // Хэрэв файл байхгүй бол asset-ээс бичих
+    if (!await file.exists()) {
+      final byteData = await rootBundle.load(lesson.audioPath);
+      await file.writeAsBytes(byteData.buffer.asUint8List());
+    }
+
+    // SharedPreferences-д хадгалах
+    final prefs = await SharedPreferences.getInstance();
+    final downloads = prefs.getStringList('downloads') ?? [];
+    final newData = jsonEncode({
+      "title": lesson.title,
+      "lessonNumber": lesson.lessonNumber,
+      "startTime": lesson.startTime,
+      "duration": lesson.duration.inSeconds,
+      "audioPath": file.path,
+      "lessonDescription": lesson.lessonDescription,
+      "isLiked": lesson.isLiked,
+    });
+    if (!downloads.any(
+      (d) => jsonDecode(d)['lessonNumber'] == lesson.lessonNumber,
+    )) {
+      downloads.add(newData);
+      await prefs.setStringList('downloads', downloads);
+    }
+
+    // Тоглуулах
+    await _audioPlayer.stop();
+    await _audioPlayer.setAudioSource(AudioSource.file(file.path, tag: lesson));
+    currentLessonNotifier.value = lesson;
+    _audioPlayer.play();
   }
 }

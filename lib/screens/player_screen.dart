@@ -5,7 +5,7 @@ import 'package:audio_app_2/components/lesson_info.dart';
 import 'package:audio_app_2/components/lessons_bottom_sheet.dart';
 import 'package:audio_app_2/components/progress_bar.dart';
 import 'package:audio_app_2/components/waveform_painter.dart';
-import 'package:audio_app_2/page_manager.dart';
+import 'package:audio_app_2/managers/page_manager.dart';
 import 'package:flutter/material.dart';
 
 class PlayerScreen extends StatefulWidget {

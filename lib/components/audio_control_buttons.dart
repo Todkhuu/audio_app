@@ -5,7 +5,7 @@ import 'package:audio_app_2/components/buttons/previous_button.dart';
 import 'package:audio_app_2/components/buttons/repeat_button.dart';
 import 'package:audio_app_2/components/buttons/rewind_5_button.dart';
 import 'package:audio_app_2/components/buttons/speed_button.dart';
-import 'package:audio_app_2/page_manager.dart';
+import 'package:audio_app_2/managers/page_manager.dart';
 import 'package:flutter/material.dart';
 
 class AudioControlButtons extends StatelessWidget {

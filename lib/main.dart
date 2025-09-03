@@ -1,4 +1,4 @@
-import 'package:audio_app_2/screens/player_screen.dart';
+import 'package:audio_app_2/screens/audio_app_bottom_nav.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -27,7 +27,7 @@ class MyApp extends StatelessWidget {
         ),
       ),
       debugShowCheckedModeBanner: false,
-      home: const PlayerScreen(),
+      home: const AudioAppBottomNav(),
     );
   }
 }

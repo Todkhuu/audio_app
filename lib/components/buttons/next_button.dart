@@ -1,4 +1,4 @@
-import 'package:audio_app_2/page_manager.dart';
+import 'package:audio_app_2/managers/page_manager.dart';
 import 'package:flutter/material.dart';
 
 class NextSongButton extends StatelessWidget {

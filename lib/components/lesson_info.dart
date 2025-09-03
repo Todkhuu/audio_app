@@ -1,5 +1,5 @@
 import 'package:audio_app_2/models/audio_lesson.dart';
-import 'package:audio_app_2/page_manager.dart';
+import 'package:audio_app_2/managers/page_manager.dart';
 import 'package:flutter/material.dart';
 
 class LessonInfo extends StatelessWidget {

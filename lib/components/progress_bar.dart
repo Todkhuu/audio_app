@@ -1,5 +1,5 @@
 import 'package:audio_app_2/notifiers/progress_notifier.dart';
-import 'package:audio_app_2/page_manager.dart';
+import 'package:audio_app_2/managers/page_manager.dart';
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
 
