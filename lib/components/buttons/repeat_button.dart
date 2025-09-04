@@ -15,16 +15,19 @@ class RepeatButton extends StatelessWidget {
         switch (value) {
           case RepeatState.off:
             image = Image.asset(
-              'assets/images/reload.png',
+              'assets/images/audio_control/reload.png',
               width: 16,
               color: Color(0xFFCAD0D7).withOpacity(0.4),
             );
             break;
           case RepeatState.repeatSong:
-            image = Image.asset('assets/images/1.png', width: 16);
+            image = Image.asset('assets/images/audio_control/1.png', width: 16);
             break;
           case RepeatState.repeatPlaylist:
-            image = Image.asset('assets/images/reload.png', width: 16);
+            image = Image.asset(
+              'assets/images/audio_control/reload.png',
+              width: 16,
+            );
             break;
         }
         return IconButton(

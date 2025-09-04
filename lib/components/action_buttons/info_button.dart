@@ -61,7 +61,11 @@ class InfoButton extends StatelessWidget {
             },
           );
         },
-        icon: Image.asset('assets/images/info.png', width: 26, height: 26),
+        icon: Image.asset(
+          'assets/images/action_control/info.png',
+          width: 26,
+          height: 26,
+        ),
       ),
     );
   }

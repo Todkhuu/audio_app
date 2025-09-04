@@ -13,18 +13,13 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Audio Downloader',
       theme: ThemeData(
-        textTheme: GoogleFonts.geologicaTextTheme(Theme.of(context).textTheme),
-        primaryColor: Colors.white,
-        scaffoldBackgroundColor: Colors.white,
         appBarTheme: const AppBarTheme(
           backgroundColor: Colors.white,
-          iconTheme: IconThemeData(color: Colors.black),
-          titleTextStyle: TextStyle(
-            color: Colors.black,
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-          ),
+          surfaceTintColor: Colors.transparent, // Энэ нь чухал!
+          elevation: 1,
         ),
+
+        textTheme: GoogleFonts.geologicaTextTheme(Theme.of(context).textTheme),
       ),
       debugShowCheckedModeBanner: false,
       home: const AudioAppBottomNav(),

@@ -24,17 +24,22 @@ class LikeButton extends StatelessWidget {
               if (lesson != null) {
                 pageManager.currentLessonNotifier.value = AudioLesson(
                   title: lesson.title,
+                  lessonName: lesson.lessonName,
                   lessonNumber: lesson.lessonNumber,
                   startTime: lesson.startTime,
                   duration: lesson.duration,
                   audioPath: lesson.audioPath,
                   lessonDescription: lesson.lessonDescription,
                   isLiked: !lesson.isLiked,
+                  image: lesson.image,
+                  bgImage: lesson.bgImage,
+                  remainingDays: lesson.remainingDays,
+                  price: lesson.price,
                 );
               }
             },
             icon: Image.asset(
-              'assets/images/like.png',
+              'assets/images/action_control/like.png',
               width: 26,
               height: 26,
               color: isLiked ? Colors.red : Color(0xFFCAD0D7),

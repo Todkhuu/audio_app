@@ -48,6 +48,7 @@ class DownloadedLessonsPage extends StatelessWidget {
                   ),
                   title: Text(lesson.title),
                   subtitle: Column(
+                    mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(lesson.lessonNumber),
@@ -64,7 +65,9 @@ class DownloadedLessonsPage extends StatelessWidget {
                     children: [
                       // Play товч
                       IconButton(
-                        icon: Image.asset('assets/images/play.png'),
+                        icon: Image.asset(
+                          'assets/images/audio_control/play.png',
+                        ),
                         onPressed: () {
                           Navigator.push(
                             context,

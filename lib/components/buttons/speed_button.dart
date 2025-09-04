@@ -16,13 +16,13 @@ class SpeedButton extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Image.asset(
-                'assets/images/1x.png',
+                'assets/images/audio_control/1x.png',
                 width: 9,
                 height: 14,
                 color: Color(0xFFCAD0D7),
               ),
               Image.asset(
-                'assets/images/x1.png',
+                'assets/images/audio_control/x1.png',
                 width: 8,
                 height: 9,
                 color: Color(0xFFCAD0D7),
@@ -34,13 +34,13 @@ class SpeedButton extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Image.asset(
-                'assets/images/2.png',
+                'assets/images/audio_control/2.png',
                 width: 9,
                 height: 14,
                 color: Color(0xFFCAD0D7),
               ),
               Image.asset(
-                'assets/images/x2.png',
+                'assets/images/audio_control/x2.png',
                 width: 8,
                 height: 9,
                 color: Color(0xFFCAD0D7),
@@ -52,13 +52,13 @@ class SpeedButton extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Image.asset(
-                'assets/images/3.png',
+                'assets/images/audio_control/3.png',
                 width: 9,
                 height: 14,
                 color: Color(0xFFCAD0D7),
               ),
               Image.asset(
-                'assets/images/x3.png',
+                'assets/images/audio_control/x3.png',
                 width: 8,
                 height: 9,
                 color: Color(0xFFCAD0D7),

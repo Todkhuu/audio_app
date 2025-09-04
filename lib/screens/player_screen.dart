@@ -49,7 +49,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.asset('assets/images/bg.png'),
+            Image.asset(widget.lesson.bgImage),
             ActionButtons(pageManager: widget.pageManager),
             LessonInfo(pageManager: widget.pageManager),
             WaveformPainter(pageManager: widget.pageManager),

@@ -30,3 +30,7 @@ flutter:
   assets:
     - assets/audio/
     - assets/images/
+    - assets/images/bg/
+    - assets/images/audio_control/
+    - assets/images/action_control/
+    - assets/images/bottom_nav/

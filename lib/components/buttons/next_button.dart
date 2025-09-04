@@ -11,7 +11,7 @@ class NextSongButton extends StatelessWidget {
       builder: (_, isLast, __) {
         return IconButton(
           icon: Image.asset(
-            'assets/images/next.png',
+            'assets/images/audio_control/next.png',
             width: 17,
             color: isLast ? Color(0xFFCAD0D7) : null,
           ),

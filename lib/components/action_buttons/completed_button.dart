@@ -14,7 +14,11 @@ class CompletedButton extends StatelessWidget {
       ),
       child: IconButton(
         onPressed: () {},
-        icon: Image.asset('assets/images/checkbox.png', width: 26, height: 26),
+        icon: Image.asset(
+          'assets/images/action_control/checkbox.png',
+          width: 26,
+          height: 26,
+        ),
       ),
     );
   }

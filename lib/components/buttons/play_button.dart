@@ -21,7 +21,7 @@ class PlayButton extends StatelessWidget {
           case ButtonState.paused:
             return IconButton(
               icon: Image.asset(
-                'assets/images/play.png',
+                'assets/images/audio_control/play.png',
                 width: 55,
                 color: Color(0xFFCAD0D7),
               ),
@@ -29,7 +29,10 @@ class PlayButton extends StatelessWidget {
             );
           case ButtonState.playing:
             return IconButton(
-              icon: Image.asset('assets/images/play.png', width: 55),
+              icon: Image.asset(
+                'assets/images/audio_control/play.png',
+                width: 55,
+              ),
               onPressed: pageManager.pause,
             );
         }

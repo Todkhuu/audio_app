@@ -38,22 +38,32 @@ class PageManager {
   // Assets файлуудын жагсаалт
   final List<AudioLesson> _assetsLessons = [
     AudioLesson(
-      title: "Бясалгал 1",
+      title: "Сэтгэлийн хүчээ мэдэр",
+      lessonName: 'Бясалгал 1',
       lessonNumber: "Хичээл 1",
       startTime: "06:00",
       duration: Duration.zero,
       audioPath: 'assets/audio/good.mp3',
       lessonDescription:
           '12-р сарын 6-ны еглее 04 цагт хийнэ, орой 18 цагаас давтаж хийнэ.',
+      image: 'assets/images/bg/setgelsmall.png',
+      bgImage: 'assets/images/bg/setgelbg.png',
+      remainingDays: '5',
+      price: 289000,
     ),
     AudioLesson(
-      title: "Бясалгал 2",
+      title: "Эдгэрэлийн дасгалжуулалт",
+      lessonName: 'Бясалгал 2',
       lessonNumber: "Хичээл 2",
       startTime: "07:00",
       duration: Duration.zero,
       audioPath: 'assets/audio/study.mp3',
       lessonDescription:
           '12-р сарын 8-ны еглее 04 цагт хийнэ, орой 20 цагаас давтаж хийнэ.',
+      image: 'assets/images/bg/edgerelsmall.png',
+      bgImage: 'assets/images/bg/edgerelbg.png',
+      remainingDays: '10',
+      price: 258300,
     ),
   ];
 
@@ -142,12 +152,17 @@ class PageManager {
       if (lesson != null) {
         currentLessonNotifier.value = AudioLesson(
           title: lesson.title,
+          lessonName: lesson.lessonName,
           lessonNumber: lesson.lessonNumber,
           startTime: lesson.startTime,
           duration: safeDuration,
           audioPath: lesson.audioPath,
           lessonDescription: lesson.lessonDescription,
           isLiked: lesson.isLiked,
+          image: lesson.image,
+          bgImage: lesson.bgImage,
+          remainingDays: lesson.remainingDays,
+          price: lesson.price,
         );
       }
     });
@@ -299,12 +314,17 @@ class PageManager {
 
     final newData = jsonEncode({
       "title": lesson.title,
+      "lessonName": lesson.lessonName,
       "lessonNumber": lesson.lessonNumber,
       "startTime": lesson.startTime,
       "duration": lesson.duration.inSeconds,
-      "audioPath": localPath, // Локал файлын зам
+      "audioPath": localPath,
       "lessonDescription": lesson.lessonDescription,
       "isLiked": lesson.isLiked,
+      "image": lesson.image,
+      "bgImage": lesson.bgImage,
+      "remainingDays": lesson.remainingDays,
+      "price": lesson.price,
     });
 
     // Давхардуулахгүй байхын тулд шалгана
@@ -323,12 +343,17 @@ class PageManager {
   Future<void> _playLocalFile(String filePath, AudioLesson lesson) async {
     final updatedLesson = AudioLesson(
       title: lesson.title,
+      lessonName: lesson.lessonName,
       lessonNumber: lesson.lessonNumber,
       startTime: lesson.startTime,
       duration: lesson.duration,
       audioPath: filePath,
       lessonDescription: lesson.lessonDescription,
       isLiked: lesson.isLiked,
+      image: lesson.image,
+      bgImage: lesson.bgImage,
+      remainingDays: lesson.remainingDays,
+      price: lesson.price,
     );
 
     await _audioPlayer.stop();
@@ -346,13 +371,18 @@ class PageManager {
     final downloadedLessons = downloads.map((d) {
       final json = jsonDecode(d);
       return AudioLesson(
-        title: json['title'],
-        lessonNumber: json['lessonNumber'],
-        startTime: json['startTime'],
-        duration: Duration(seconds: json['duration']),
-        audioPath: json['audioPath'],
-        lessonDescription: json['lessonDescription'],
+        title: json['title'] ?? '',
+        lessonName: json['lessonName'] ?? '',
+        lessonNumber: json['lessonNumber'] ?? '',
+        startTime: json['startTime'] ?? '',
+        duration: Duration(seconds: json['duration'] ?? 0),
+        audioPath: json['audioPath'] ?? '',
+        lessonDescription: json['lessonDescription'] ?? '',
         isLiked: json['isLiked'] ?? false,
+        image: json['image'] ?? 'assets/images/default.png', // default image
+        bgImage: json['bgImage'] ?? 'assets/images/default_bg.png',
+        remainingDays: json['remainingDays'] ?? '',
+        price: json['price'] ?? 0,
       );
     }).toList();
 

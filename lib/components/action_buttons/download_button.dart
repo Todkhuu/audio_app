@@ -27,7 +27,11 @@ class DownloadButton extends StatelessWidget {
             const SnackBar(content: Text("Аудио татагдаж хадгалагдлаа ✅")),
           );
         },
-        icon: Image.asset('assets/images/download.png', width: 26, height: 26),
+        icon: Image.asset(
+          'assets/images/action_control/download.png',
+          width: 26,
+          height: 26,
+        ),
       ),
     );
   }

@@ -27,7 +27,7 @@ class LessonInfo extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                lesson.title,
+                lesson.lessonName,
                 style: TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
