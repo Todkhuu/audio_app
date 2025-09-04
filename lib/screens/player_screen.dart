@@ -6,28 +6,38 @@ import 'package:audio_app_2/components/lessons_bottom_sheet.dart';
 import 'package:audio_app_2/components/progress_bar.dart';
 import 'package:audio_app_2/components/waveform_painter.dart';
 import 'package:audio_app_2/managers/page_manager.dart';
+import 'package:audio_app_2/models/audio_lesson.dart';
 import 'package:flutter/material.dart';
 
 class PlayerScreen extends StatefulWidget {
-  const PlayerScreen({super.key});
+  final AudioLesson lesson;
+  final PageManager pageManager;
+
+  const PlayerScreen({
+    super.key,
+    required this.lesson,
+    required this.pageManager,
+  });
 
   @override
   State<PlayerScreen> createState() => _PlayerScreenState();
 }
 
-late final PageManager _pageManager;
-
 class _PlayerScreenState extends State<PlayerScreen> {
   @override
   void initState() {
     super.initState();
-    _pageManager = PageManager();
+    _playLesson();
   }
 
-  @override
-  void dispose() {
-    _pageManager.dispose();
-    super.dispose();
+  void _playLesson() async {
+    // Assets файл эсэх шалгах
+    if (widget.lesson.audioPath.startsWith('assets')) {
+      await widget.pageManager.playAssetLesson(widget.lesson);
+    } else {
+      // Download хийгдсэн файл
+      await widget.pageManager.playDownloadedLesson(widget.lesson);
+    }
   }
 
   @override
@@ -40,18 +50,18 @@ class _PlayerScreenState extends State<PlayerScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Image.asset('assets/images/bg.png'),
-            ActionButtons(pageManager: _pageManager),
-            LessonInfo(pageManager: _pageManager),
-            WaveformPainter(pageManager: _pageManager),
-            AudioProgressBar(pageManager: _pageManager),
-            AudioControlButtons(pageManager: _pageManager),
+            ActionButtons(pageManager: widget.pageManager),
+            LessonInfo(pageManager: widget.pageManager),
+            WaveformPainter(pageManager: widget.pageManager),
+            AudioProgressBar(pageManager: widget.pageManager),
+            AudioControlButtons(pageManager: widget.pageManager),
             const Spacer(),
             Padding(
               padding: const EdgeInsets.only(bottom: 35),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  LessonsBottomSheet(pageManager: _pageManager),
+                  LessonsBottomSheet(pageManager: widget.pageManager),
 
                   ElevatedButton(
                     onPressed: () {},

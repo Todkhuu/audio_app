@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:audio_app_2/models/audio_lesson.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
@@ -18,6 +17,8 @@ class PageManager {
   final currentLessonNotifier = ValueNotifier<AudioLesson?>(null);
   // Playlist-д байгаа бүх хичээлүүдийн жагсаалт.
   final playlistNotifier = ValueNotifier<List<AudioLesson>>([]);
+  // Assets файлуудын жагсаалт (Home page-д харуулахад)
+  final assetsLessonsNotifier = ValueNotifier<List<AudioLesson>>([]);
   // Audio progress bar-ийн мэдээлэл (одоо, buffered, нийт хугацаа).
   final progressNotifier = ProgressNotifier();
   // Дахин тоглох товчны state (off, нэг дуу, playlist).
@@ -29,9 +30,32 @@ class PageManager {
   final playButtonNotifier = PlayButtonNotifier();
   // Тоглуулах хурд (1x, 2x, 3x).
   final speedNotifier = ValueNotifier<double>(1.0);
+  final downloadedLessonsNotifier = ValueNotifier<List<AudioLesson>>([]);
 
   late AudioPlayer _audioPlayer;
   late ConcatenatingAudioSource _playlist;
+
+  // Assets файлуудын жагсаалт
+  final List<AudioLesson> _assetsLessons = [
+    AudioLesson(
+      title: "Бясалгал 1",
+      lessonNumber: "Хичээл 1",
+      startTime: "06:00",
+      duration: Duration.zero,
+      audioPath: 'assets/audio/good.mp3',
+      lessonDescription:
+          '12-р сарын 6-ны еглее 04 цагт хийнэ, орой 18 цагаас давтаж хийнэ.',
+    ),
+    AudioLesson(
+      title: "Бясалгал 2",
+      lessonNumber: "Хичээл 2",
+      startTime: "07:00",
+      duration: Duration.zero,
+      audioPath: 'assets/audio/study.mp3',
+      lessonDescription:
+          '12-р сарын 8-ны еглее 04 цагт хийнэ, орой 20 цагаас давтаж хийнэ.',
+    ),
+  ];
 
   PageManager() {
     _init();
@@ -41,43 +65,21 @@ class PageManager {
   // AudioPlayer үүсгэх, playlist set хийх, listener-уудыг ажиллуулах.
   void _init() async {
     _audioPlayer = AudioPlayer();
+    await _loadDownloadedLessons();
     _setInitialPlaylist();
     _listenForChangesInPlayerState();
     _listenForChangesInPlayerPosition();
     _listenForChangesInBufferedPosition();
     _listenForChangesInTotalDuration();
     _listenForChangesInSequenceState();
+
+    assetsLessonsNotifier.value = _assetsLessons;
   }
 
   // tag: lesson – AudioSource-д lesson объект холбож, дараа нь UI update-д ашиглана.
   Future<void> _setInitialPlaylist() async {
-    final lessons = [
-      AudioLesson(
-        title: "Бясалгал 1",
-        lessonNumber: "Хичээл 1",
-        startTime: "06:00",
-        duration: Duration.zero,
-        audioPath: 'assets/audio/good.mp3',
-        lessonDescription:
-            '12-р сарын 6-ны еглее 04 цагт хийнэ, орой 18 цагаас давтаж хийнэ.',
-      ),
-      AudioLesson(
-        title: "Бясалгал 2",
-        lessonNumber: "Хичээл 2",
-        startTime: "07:00",
-        duration: Duration.zero,
-        audioPath: 'assets/audio/study.mp3',
-        lessonDescription:
-            '12-р сарын 8-ны еглее 04 цагт хийнэ, орой 20 цагаас давтаж хийнэ.',
-      ),
-    ];
-
-    _playlist = ConcatenatingAudioSource(
-      children: lessons
-          .map((lesson) => AudioSource.asset(lesson.audioPath, tag: lesson))
-          .toList(),
-    );
-
+    // Эхний playlist хоосон байна, шаардлагатай үедээ lesson нэмнэ
+    _playlist = ConcatenatingAudioSource(children: []);
     await _audioPlayer.setAudioSource(_playlist);
   }
 
@@ -260,43 +262,155 @@ class PageManager {
   }
 
   void playLessonAt(int index) {
-    _audioPlayer.seek(Duration.zero, index: index);
-    play();
+    if (index >= 0 && index < _playlist.children.length) {
+      _audioPlayer.seek(Duration.zero, index: index);
+      play();
+    }
   }
 
+  // downloadAndPlay дотор
   Future<void> downloadAndPlay(AudioLesson lesson) async {
-    final dir = await getApplicationDocumentsDirectory();
-    final file = File('${dir.path}/${lesson.lessonNumber}.mp3');
+    try {
+      final dir = await getApplicationDocumentsDirectory();
+      final file = File('${dir.path}/${lesson.lessonNumber}.mp3');
 
-    // Хэрэв файл байхгүй бол asset-ээс бичих
-    if (!await file.exists()) {
-      final byteData = await rootBundle.load(lesson.audioPath);
-      await file.writeAsBytes(byteData.buffer.asUint8List());
+      // Файл байхгүй бол assets-аас хуулна
+      if (!await file.exists()) {
+        final byteData = await rootBundle.load(lesson.audioPath);
+        await file.writeAsBytes(byteData.buffer.asUint8List());
+      }
+
+      // SharedPreferences-д хадгалах
+      await _saveDownloadedLesson(lesson, file.path);
+
+      // Тоглуулах
+      await _playLocalFile(file.path, lesson);
+    } catch (e) {
+      print('Download болон тоглуулахад алдаа гарлаа: $e');
     }
+  }
 
-    // SharedPreferences-д хадгалах
+  Future<void> _saveDownloadedLesson(
+    AudioLesson lesson,
+    String localPath,
+  ) async {
     final prefs = await SharedPreferences.getInstance();
     final downloads = prefs.getStringList('downloads') ?? [];
+
     final newData = jsonEncode({
       "title": lesson.title,
       "lessonNumber": lesson.lessonNumber,
       "startTime": lesson.startTime,
       "duration": lesson.duration.inSeconds,
-      "audioPath": file.path,
+      "audioPath": localPath, // Локал файлын зам
       "lessonDescription": lesson.lessonDescription,
       "isLiked": lesson.isLiked,
     });
+
+    // Давхардуулахгүй байхын тулд шалгана
     if (!downloads.any(
       (d) => jsonDecode(d)['lessonNumber'] == lesson.lessonNumber,
     )) {
       downloads.add(newData);
       await prefs.setStringList('downloads', downloads);
-    }
 
-    // Тоглуулах
+      // downloadedLessonsNotifier шинэчлэх
+      await _loadDownloadedLessons();
+    }
+  }
+
+  // Download хийсэн lesson устгах
+  Future<void> _playLocalFile(String filePath, AudioLesson lesson) async {
+    final updatedLesson = AudioLesson(
+      title: lesson.title,
+      lessonNumber: lesson.lessonNumber,
+      startTime: lesson.startTime,
+      duration: lesson.duration,
+      audioPath: filePath,
+      lessonDescription: lesson.lessonDescription,
+      isLiked: lesson.isLiked,
+    );
+
     await _audioPlayer.stop();
-    await _audioPlayer.setAudioSource(AudioSource.file(file.path, tag: lesson));
-    currentLessonNotifier.value = lesson;
+    await _audioPlayer.setAudioSource(
+      AudioSource.file(filePath, tag: updatedLesson),
+    );
+    currentLessonNotifier.value = updatedLesson;
     _audioPlayer.play();
+  }
+
+  Future<void> _loadDownloadedLessons() async {
+    final prefs = await SharedPreferences.getInstance();
+    final downloads = prefs.getStringList('downloads') ?? [];
+
+    final downloadedLessons = downloads.map((d) {
+      final json = jsonDecode(d);
+      return AudioLesson(
+        title: json['title'],
+        lessonNumber: json['lessonNumber'],
+        startTime: json['startTime'],
+        duration: Duration(seconds: json['duration']),
+        audioPath: json['audioPath'],
+        lessonDescription: json['lessonDescription'],
+        isLiked: json['isLiked'] ?? false,
+      );
+    }).toList();
+
+    downloadedLessonsNotifier.value = downloadedLessons;
+  }
+
+  Future<void> deleteDownloadedLesson(AudioLesson lesson) async {
+    try {
+      final file = File(lesson.audioPath);
+      if (await file.exists()) await file.delete();
+
+      final prefs = await SharedPreferences.getInstance();
+      final downloads = prefs.getStringList('downloads') ?? [];
+      downloads.removeWhere(
+        (d) => jsonDecode(d)['lessonNumber'] == lesson.lessonNumber,
+      );
+      await prefs.setStringList('downloads', downloads);
+
+      // downloadedLessonsNotifier-ийг шинэчлэх
+      await _loadDownloadedLessons();
+
+      // Хэрэв одоо тоглож буй lesson устгагдсан бол зогсоох
+      if (currentLessonNotifier.value?.lessonNumber == lesson.lessonNumber) {
+        await _audioPlayer.stop();
+        currentLessonNotifier.value = null;
+      }
+    } catch (e) {
+      print('Файл устгахад алдаа гарлаа: $e');
+    }
+  }
+
+  // Assets файлыг тоглуулах
+  Future<void> playAssetLesson(AudioLesson lesson) async {
+    try {
+      await _audioPlayer.stop();
+      await _audioPlayer.setAudioSource(
+        AudioSource.asset(lesson.audioPath, tag: lesson),
+      );
+      currentLessonNotifier.value = lesson;
+      _audioPlayer.play();
+    } catch (e) {
+      print('Asset файл тоглуулахад алдаа гарлаа: $e');
+    }
+  }
+
+  // Download хийгдсэн файлыг тоглуулах
+  Future<void> playDownloadedLesson(AudioLesson lesson) async {
+    try {
+      await _playLocalFile(lesson.audioPath, lesson);
+    } catch (e) {
+      print('Download хийгдсэн файл тоглуулахад алдаа гарлаа: $e');
+    }
+  }
+
+  // Lesson download хийгдсэн эсэхийг шалгах
+  bool isLessonDownloaded(AudioLesson lesson) {
+    return downloadedLessonsNotifier.value.any(
+      (dl) => dl.lessonNumber == lesson.lessonNumber,
+    );
   }
 }
