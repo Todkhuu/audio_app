@@ -298,6 +298,8 @@ class PageManager {
       // SharedPreferences-д хадгалах
       await _saveDownloadedLesson(lesson, file.path);
 
+      await _loadDownloadedLessons();
+
       // Тоглуулах
       await _playLocalFile(file.path, lesson);
     } catch (e) {

@@ -9,32 +9,44 @@ class NotificationPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
-      appBar: AppBar(
-        leading: Padding(
-          padding: const EdgeInsets.only(left: 20),
-          child: GestureDetector(
-            onTap: () => Navigator.pop(context),
-            child: SizedBox(
-              child: Image.asset(
-                'assets/images/left.png',
-                width: 45,
-                height: 45,
-              ),
+      backgroundColor: Color(0xFFf2f5f7),
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(kToolbarHeight + 20),
+        child: Container(
+          decoration: const BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(20),
+              bottomRight: Radius.circular(20),
+            ),
+          ),
+          padding: const EdgeInsets.all(20.0),
+          child: SafeArea(
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
+                    Image.asset(
+                      'assets/images/left.png',
+                      width: 45,
+                      height: 45,
+                    ),
+                    const SizedBox(width: 10),
+                    const Text(
+                      'Мэдэгдэл',
+                      style: TextStyle(
+                        fontSize: 17,
+                        fontWeight: FontWeight.w600,
+                        height: 27 / 16,
+                      ),
+                    ),
+                  ],
+                ),
+              ],
             ),
           ),
         ),
-        title: const Text(
-          'Мэдэгдэл',
-          style: TextStyle(
-            fontSize: 17,
-            fontWeight: FontWeight.w600,
-            height: 27 / 16,
-          ),
-        ),
-        backgroundColor: Colors.white,
-        elevation: 1,
-        foregroundColor: Colors.black, // text & icon хар өнгөтэй
       ),
       body: ValueListenableBuilder(
         valueListenable: _notificationService.notifications,
@@ -47,11 +59,9 @@ class NotificationPage extends StatelessWidget {
             itemCount: notifications.length,
             itemBuilder: (context, index) {
               final item = notifications[index];
-              return NotificationCard(
-                item: item,
-                onTap: () {
-                  _notificationService.markAsRead(item.id); // ✅ зөв дуудах
-                },
+              return Container(
+                margin: EdgeInsets.only(top: 15),
+                child: NotificationCard(item: item),
               );
             },
           );
