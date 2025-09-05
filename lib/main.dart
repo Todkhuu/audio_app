@@ -1,9 +1,16 @@
-import 'package:audio_app_2/screens/audio_app_bottom_nav.dart';
+import 'package:audio_app_2/managers/auth_manager.dart';
+import 'package:audio_app_2/screens/auth/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(
+    MultiProvider(
+      providers: [ChangeNotifierProvider(create: (_) => AuthManager())],
+      child: const MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -13,16 +20,18 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Audio Downloader',
       theme: ThemeData(
+        scaffoldBackgroundColor: const Color(0xFFf2f5f7),
         appBarTheme: const AppBarTheme(
           backgroundColor: Colors.white,
           surfaceTintColor: Colors.transparent, // Энэ нь чухал!
           elevation: 1,
         ),
-
-        textTheme: GoogleFonts.geologicaTextTheme(Theme.of(context).textTheme),
+        textTheme: GoogleFonts.montserratTextTheme(Theme.of(context).textTheme),
       ),
       debugShowCheckedModeBanner: false,
-      home: const AudioAppBottomNav(),
+      home: const LoginScreen(),
     );
   }
 }
+
+// const AudioAppBottomNav()

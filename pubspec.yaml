@@ -19,6 +19,7 @@ dependencies:
   flutter_audio_waveforms: ^1.2.1+8
   google_fonts: ^6.3.1
   shared_preferences: ^2.5.3
+  provider: ^6.1.5+1
 
 dev_dependencies:
   flutter_test:
@@ -35,3 +36,4 @@ flutter:
     - assets/images/action_control/
     - assets/images/bottom_nav/
     - assets/images/notification/
+    - assets/images/auth/
