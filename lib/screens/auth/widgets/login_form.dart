@@ -1,4 +1,5 @@
 import 'package:audio_app_2/managers/auth_manager.dart';
+import 'package:audio_app_2/screens/audio_app_bottom_nav.dart';
 import 'package:audio_app_2/screens/auth/widgets/face_id_dialog.dart';
 import 'package:audio_app_2/utils/input_decoration_helper.dart';
 import 'package:audio_app_2/utils/validators.dart';
@@ -84,6 +85,14 @@ class _LoginFormState extends State<LoginForm> {
                         if (authManager.errorMessage != null) {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(content: Text(authManager.errorMessage!)),
+                          );
+                        } else {
+                          // Амжилттай нэвтэрсэн бол
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const AudioAppBottomNav(),
+                            ),
                           );
                         }
                       }
