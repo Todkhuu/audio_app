@@ -11,6 +11,8 @@ class AudioLesson {
   final String bgImage;
   final int price;
   final String remainingDays;
+  final String category;
+  final DateTime? endTime;
 
   AudioLesson({
     required this.title,
@@ -25,5 +27,7 @@ class AudioLesson {
     required this.bgImage,
     required this.price,
     required this.remainingDays,
+    required this.category,
+    this.endTime,
   });
 }

@@ -35,6 +35,7 @@ class LikeButton extends StatelessWidget {
                   bgImage: lesson.bgImage,
                   remainingDays: lesson.remainingDays,
                   price: lesson.price,
+                  category: lesson.category,
                 );
               }
             },

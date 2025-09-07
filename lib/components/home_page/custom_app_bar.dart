@@ -12,11 +12,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         decoration: const BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.only(
-            bottomLeft: Radius.circular(35),
-            bottomRight: Radius.circular(35),
+            bottomLeft: Radius.circular(20),
+            bottomRight: Radius.circular(20),
           ),
         ),
-        padding: const EdgeInsets.all(20.0),
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         child: SafeArea(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -25,44 +25,63 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                 children: [
                   Image.asset(
                     'assets/images/jargaalogo.png',
-                    width: 45,
-                    height: 45,
+                    width: 30,
+                    height: 30,
                   ),
-                  const SizedBox(width: 8),
+                  const SizedBox(width: 10),
                   const Text(
                     'Jargaa',
                     style: TextStyle(
                       color: Colors.black,
-                      fontSize: 25,
-                      height: 25 / 16,
+                      fontSize: 14,
+                      height: 18.54 / 16,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                 ],
               ),
-              Container(
-                width: 45,
-                height: 45,
-                decoration: BoxDecoration(
-                  color: Color(0xFFF9F4F2),
-                  borderRadius: BorderRadius.circular(999),
-                ),
-                child: IconButton(
-                  padding: EdgeInsets.zero,
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => NotificationPage(),
-                      ),
-                    );
-                  },
-                  icon: Image.asset(
-                    'assets/images/notifs.png',
-                    width: 22,
-                    height: 22,
+              Stack(
+                children: [
+                  IconButton(
+                    padding: EdgeInsets.zero,
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => NotificationPage(),
+                        ),
+                      );
+                    },
+                    icon: Image.asset(
+                      'assets/images/notifs.png',
+                      width: 20,
+                      height: 20,
+                      color: Color(0xFFCAD0D7),
+                    ),
                   ),
-                ),
+                  Positioned(
+                    top: 1,
+                    right: 2,
+                    child: Container(
+                      width: 23,
+                      height: 19,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(55),
+                        color: Color(0xFFE8553E),
+                      ),
+                      child: const Center(
+                        child: Text(
+                          '3',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 10,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ],
           ),

@@ -1,7 +1,9 @@
+import 'package:audio_app_2/components/home_page/custom_app_bar.dart';
 import 'package:audio_app_2/managers/bottom_nav_manager.dart';
 import 'package:audio_app_2/managers/page_manager.dart';
 import 'package:audio_app_2/pages/downloaded_lessons_page.dart';
 import 'package:audio_app_2/pages/home_page.dart';
+import 'package:audio_app_2/pages/lesson_page.dart';
 import 'package:audio_app_2/pages/news_page.dart';
 import 'package:audio_app_2/pages/profile_page.dart';
 import 'package:flutter/material.dart';
@@ -28,84 +30,158 @@ class _AudioAppBottomNavState extends State<AudioAppBottomNav> {
   Widget build(BuildContext context) {
     final pages = [
       HomePage(pageManager: pageManager),
+      LessonPage(),
       NewsPage(),
-      DownloadedLessonsPage(pageManager: pageManager),
       ProfilePage(),
+      DownloadedLessonsPage(pageManager: pageManager),
     ];
 
     return ValueListenableBuilder(
       valueListenable: navManager.selectedIndex,
       builder: (context, selectedIndex, _) {
         return Scaffold(
+          appBar: const CustomAppBar(),
           body: pages[selectedIndex],
           bottomNavigationBar: Container(
+            height: 89,
+            padding: const EdgeInsets.only(top: 0, bottom: 0),
             decoration: BoxDecoration(
               color: Colors.white,
-              border: Border(
-                top: BorderSide(color: Color(0xFFF9F4F2), width: 2),
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(20),
+                topRight: Radius.circular(20),
               ),
             ),
-            child: BottomNavigationBar(
-              currentIndex: selectedIndex,
-              selectedItemColor: Colors.black,
-              unselectedItemColor: Color(0xFFCFCBC9),
-              backgroundColor: Colors.transparent,
-              elevation: 0,
-              type: BottomNavigationBarType.fixed,
-              showUnselectedLabels: true,
-              onTap: navManager.onItemTapped,
-              items: [
-                BottomNavigationBarItem(
-                  icon: ColorFiltered(
-                    colorFilter: selectedIndex == 0
-                        ? ColorFilter.mode(Color(0xFFFEAC33), BlendMode.srcIn)
-                        : ColorFilter.mode(Color(0xFFCFCBC9), BlendMode.srcIn),
-                    child: Image.asset(
-                      'assets/images/bottom_nav/home.png',
-                      width: 24,
-                      height: 24,
-                    ),
+            clipBehavior: Clip.antiAlias,
+            child: Stack(
+              children: [
+                BottomNavigationBar(
+                  currentIndex: selectedIndex,
+                  selectedLabelStyle: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 11,
+                    color: Color(0xFF33547D),
+                    height: 25 / 14,
                   ),
-                  label: "Эхлэл",
+                  unselectedLabelStyle: const TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 11,
+                    color: Color(0xFFCAD0D7),
+                    height: 25 / 14,
+                  ),
+                  backgroundColor: Colors.transparent,
+                  elevation: 0,
+                  type: BottomNavigationBarType.fixed,
+                  showUnselectedLabels: true,
+                  onTap: navManager.onItemTapped,
+                  items: [
+                    BottomNavigationBarItem(
+                      icon: ColorFiltered(
+                        colorFilter: selectedIndex == 0
+                            ? ColorFilter.mode(
+                                Color(0xFF33547D),
+                                BlendMode.srcIn,
+                              )
+                            : ColorFilter.mode(
+                                Color(0xFFCAD0D7),
+                                BlendMode.srcIn,
+                              ),
+                        child: Image.asset(
+                          'assets/images/bottom_nav/home.png',
+                          width: 24,
+                          height: 24,
+                        ),
+                      ),
+                      label: "Эхлэл",
+                    ),
+                    BottomNavigationBarItem(
+                      icon: ColorFiltered(
+                        colorFilter: selectedIndex == 1
+                            ? ColorFilter.mode(
+                                Color(0xFF33547D),
+                                BlendMode.srcIn,
+                              )
+                            : ColorFilter.mode(
+                                Color(0xFFCAD0D7),
+                                BlendMode.srcIn,
+                              ),
+                        child: Image.asset(
+                          'assets/images/bottom_nav/lesson.png',
+                          width: 24,
+                          height: 24,
+                        ),
+                      ),
+                      label: 'Хичээл',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: ColorFiltered(
+                        colorFilter: selectedIndex == 2
+                            ? ColorFilter.mode(
+                                Color(0xFF33547D),
+                                BlendMode.srcIn,
+                              )
+                            : ColorFilter.mode(
+                                Color(0xFFCAD0D7),
+                                BlendMode.srcIn,
+                              ),
+                        child: Image.asset(
+                          'assets/images/bottom_nav/news.png',
+                          width: 24,
+                          height: 24,
+                        ),
+                      ),
+                      label: 'Мэдээ',
+                    ),
+                    BottomNavigationBarItem(
+                      icon: ColorFiltered(
+                        colorFilter: selectedIndex == 3
+                            ? ColorFilter.mode(
+                                Color(0xFF33547D),
+                                BlendMode.srcIn,
+                              )
+                            : ColorFilter.mode(
+                                Color(0xFFCAD0D7),
+                                BlendMode.srcIn,
+                              ),
+                        child: Image.asset(
+                          'assets/images/bottom_nav/profile.png',
+                          width: 24,
+                          height: 24,
+                        ),
+                      ),
+                      label: "Миний",
+                    ),
+                    BottomNavigationBarItem(
+                      icon: ColorFiltered(
+                        colorFilter: selectedIndex == 4
+                            ? ColorFilter.mode(
+                                Color(0xFF33547D),
+                                BlendMode.srcIn,
+                              )
+                            : ColorFilter.mode(
+                                Color(0xFFCAD0D7),
+                                BlendMode.srcIn,
+                              ),
+                        child: Image.asset(
+                          'assets/images/bottom_nav/downloads.png',
+                          width: 24,
+                          height: 24,
+                        ),
+                      ),
+                      label: "Татсан",
+                    ),
+                  ],
                 ),
-                BottomNavigationBarItem(
-                  icon: ColorFiltered(
-                    colorFilter: selectedIndex == 1
-                        ? ColorFilter.mode(Color(0xFFFEAC33), BlendMode.srcIn)
-                        : ColorFilter.mode(Color(0xFFCFCBC9), BlendMode.srcIn),
-                    child: Image.asset(
-                      'assets/images/bottom_nav/news.png',
-                      width: 24,
-                      height: 24,
-                    ),
+                Positioned(
+                  top: 0,
+                  left:
+                      MediaQuery.of(context).size.width / 5 * selectedIndex +
+                      (MediaQuery.of(context).size.width / 5 - 24) / 2,
+                  child: Container(
+                    width: 24,
+                    height: 2.05,
+                    color: Color(0xFF33547D),
                   ),
-                  label: 'Мэдээ',
-                ),
-                BottomNavigationBarItem(
-                  icon: ColorFiltered(
-                    colorFilter: selectedIndex == 2
-                        ? ColorFilter.mode(Color(0xFFFEAC33), BlendMode.srcIn)
-                        : ColorFilter.mode(Color(0xFFCFCBC9), BlendMode.srcIn),
-                    child: Image.asset(
-                      'assets/images/bottom_nav/downloads.png',
-                      width: 24,
-                      height: 24,
-                    ),
-                  ),
-                  label: "Татсан",
-                ),
-                BottomNavigationBarItem(
-                  icon: ColorFiltered(
-                    colorFilter: selectedIndex == 3
-                        ? ColorFilter.mode(Color(0xFFFEAC33), BlendMode.srcIn)
-                        : ColorFilter.mode(Color(0xFFCFCBC9), BlendMode.srcIn),
-                    child: Image.asset(
-                      'assets/images/bottom_nav/profile.png',
-                      width: 24,
-                      height: 24,
-                    ),
-                  ),
-                  label: "Профайл",
                 ),
               ],
             ),

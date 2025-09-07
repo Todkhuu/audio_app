@@ -101,7 +101,7 @@ class _LoginFormState extends State<LoginForm> {
                       backgroundColor: const Color(0xFF33547D),
                       foregroundColor: Colors.white,
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 120,
+                        horizontal: 100,
                         vertical: 20,
                       ),
                       shape: RoundedRectangleBorder(

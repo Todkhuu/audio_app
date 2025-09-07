@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'package:audio_app_2/models/audio_lesson.dart';
 import 'package:flutter/material.dart';
@@ -12,25 +13,18 @@ import 'package:path_provider/path_provider.dart';
 
 class PageManager {
   // <-- 1. State & Notifiers – UI update хийх. -->
-
-  // Одоо тоглож буй хичээл
   final currentLessonNotifier = ValueNotifier<AudioLesson?>(null);
-  // Playlist-д байгаа бүх хичээлүүдийн жагсаалт.
   final playlistNotifier = ValueNotifier<List<AudioLesson>>([]);
-  // Assets файлуудын жагсаалт (Home page-д харуулахад)
   final assetsLessonsNotifier = ValueNotifier<List<AudioLesson>>([]);
-  // Audio progress bar-ийн мэдээлэл (одоо, buffered, нийт хугацаа).
   final progressNotifier = ProgressNotifier();
-  // Дахин тоглох товчны state (off, нэг дуу, playlist).
   final repeatButtonNotifier = RepeatButtonNotifier();
-  // Playlist-ийн эх, сүүлд тоглож буй эсэхийг тэмдэглэнэ.
   final isFirstSongNotifier = ValueNotifier<bool>(true);
   final isLastSongNotifier = ValueNotifier<bool>(true);
-  // Тоглох/Pause/Loading товчны state.
   final playButtonNotifier = PlayButtonNotifier();
-  // Тоглуулах хурд (1x, 2x, 3x).
   final speedNotifier = ValueNotifier<double>(1.0);
   final downloadedLessonsNotifier = ValueNotifier<List<AudioLesson>>([]);
+  final selectedCategoryNotifier = ValueNotifier<String>("Бүгд");
+  final countdownNotifiers = <String, ValueNotifier<Duration>>{};
 
   late AudioPlayer _audioPlayer;
   late ConcatenatingAudioSource _playlist;
@@ -45,11 +39,13 @@ class PageManager {
       duration: Duration.zero,
       audioPath: 'assets/audio/good.mp3',
       lessonDescription:
-          '12-р сарын 6-ны еглее 04 цагт хийнэ, орой 18 цагаас давтаж хийнэ.',
+          '12-р сарын 6-ны өглөө 04 цагт хийнэ, орой 18 цагаас давтаж хийнэ.',
       image: 'assets/images/bg/setgelsmall.png',
       bgImage: 'assets/images/bg/setgelbg.png',
       remainingDays: '5',
       price: 289000,
+      category: "Эрүүл мэнд",
+      endTime: DateTime.now().add(const Duration(days: 15)),
     ),
     AudioLesson(
       title: "Эдгэрэлийн дасгалжуулалт",
@@ -59,16 +55,67 @@ class PageManager {
       duration: Duration.zero,
       audioPath: 'assets/audio/study.mp3',
       lessonDescription:
-          '12-р сарын 8-ны еглее 04 цагт хийнэ, орой 20 цагаас давтаж хийнэ.',
+          '12-р сарын 8-ны өглөө 04 цагт хийнэ, орой 20 цагаас давтаж хийнэ.',
       image: 'assets/images/bg/edgerelsmall.png',
       bgImage: 'assets/images/bg/edgerelbg.png',
       remainingDays: '10',
       price: 258300,
+      category: "Эрүүл мэнд",
+    ),
+
+    // ✅ ШИНЭ MOCK DATA
+    AudioLesson(
+      title: "Хариу Мэдүүлэг",
+      lessonName: 'Бясалгал 3',
+      lessonNumber: "Хичээл 3",
+      startTime: "08:00",
+      duration: Duration.zero,
+      audioPath: 'assets/audio/country.mp3',
+      lessonDescription:
+          '12-р сарын 10-ны өглөө 05 цагт, орой 19 цагаас давтан хийнэ.',
+      image: 'assets/images/bg/hariusmall.png',
+      bgImage: 'assets/images/bg/setgelbg.png',
+      remainingDays: '7',
+      price: 199000,
+      category: "Нэмэлт сургалт",
+    ),
+    AudioLesson(
+      title: "хүсэл бүтээх хүч",
+      lessonName: 'Бясалгал 4',
+      lessonNumber: "Хичээл 4",
+      startTime: "09:00",
+      duration: Duration.zero,
+      audioPath: 'assets/audio/hiphop.mp3',
+      lessonDescription:
+          '12-р сарын 12-ны өглөө 06 цагт, орой 21 цагаас давтан хийнэ.',
+      image: 'assets/images/bg/huselsmall.png',
+      bgImage: 'assets/images/bg/setgelbg.png',
+      remainingDays: '12',
+      price: 0,
+      category: "Үнэгүй сургалт",
+    ),
+    AudioLesson(
+      title: "мөнгөний мантра",
+      lessonName: 'Бясалгал 5',
+      lessonNumber: "Хичээл 5",
+      startTime: "10:00",
+      duration: Duration.zero,
+      audioPath: 'assets/audio/pop.mp3',
+      lessonDescription:
+          '12-р сарын 15-ны өглөө 07 цагт, орой 20 цагаас давтан хийнэ.',
+      image: 'assets/images/bg/mongosmall.png',
+      bgImage: 'assets/images/bg/setgelbg.png',
+      remainingDays: '15',
+      price: 150000,
+      category: "Хөнгөлөлттэй сургалт",
     ),
   ];
 
+  Timer? _countdownTimer;
+
   PageManager() {
     _init();
+    _startCountdown();
   }
 
   // <-- 2. Init & Playlist – AudioPlayer initialize, playlist set. -->
@@ -163,6 +210,7 @@ class PageManager {
           bgImage: lesson.bgImage,
           remainingDays: lesson.remainingDays,
           price: lesson.price,
+          category: lesson.category,
         );
       }
     });
@@ -205,6 +253,7 @@ class PageManager {
 
   void dispose() {
     _audioPlayer.dispose();
+    _countdownTimer?.cancel();
   }
 
   // Loop mode тохируулах
@@ -356,6 +405,7 @@ class PageManager {
       bgImage: lesson.bgImage,
       remainingDays: lesson.remainingDays,
       price: lesson.price,
+      category: lesson.category,
     );
 
     await _audioPlayer.stop();
@@ -385,6 +435,7 @@ class PageManager {
         bgImage: json['bgImage'] ?? 'assets/images/default_bg.png',
         remainingDays: json['remainingDays'] ?? '',
         price: json['price'] ?? 0,
+        category: json['category'] ?? '',
       );
     }).toList();
 
@@ -444,5 +495,74 @@ class PageManager {
     return downloadedLessonsNotifier.value.any(
       (dl) => dl.lessonNumber == lesson.lessonNumber,
     );
+  }
+
+  List<AudioLesson> get filteredLessons {
+    if (selectedCategoryNotifier.value == "Бүгд") {
+      return assetsLessonsNotifier.value + downloadedLessonsNotifier.value;
+    }
+    return (assetsLessonsNotifier.value + downloadedLessonsNotifier.value)
+        .where((lesson) => lesson.category == selectedCategoryNotifier.value)
+        .toList();
+  }
+
+  Map<String, List<AudioLesson>> getLessonsByCategory() {
+    final allLessons =
+        assetsLessonsNotifier.value + downloadedLessonsNotifier.value;
+    final Map<String, List<AudioLesson>> categories = {};
+
+    for (var lesson in allLessons) {
+      if (categories.containsKey(lesson.category)) {
+        categories[lesson.category]!.add(lesson);
+      } else {
+        categories[lesson.category] = [lesson];
+      }
+    }
+
+    return categories;
+  }
+
+  void _startCountdown() {
+    // 1 секунд тутам update хийнэ
+    _countdownTimer = Timer.periodic(Duration(seconds: 1), (_) {
+      final now = DateTime.now();
+
+      // Assets болон downloaded lessons
+      final allLessons =
+          assetsLessonsNotifier.value + downloadedLessonsNotifier.value;
+
+      for (var lesson in allLessons) {
+        if (lesson.endTime != null) {
+          final remaining = lesson.endTime!.difference(now);
+          if (!countdownNotifiers.containsKey(lesson.lessonNumber)) {
+            countdownNotifiers[lesson.lessonNumber] = ValueNotifier(
+              remaining.isNegative ? Duration.zero : remaining,
+            );
+          } else {
+            countdownNotifiers[lesson.lessonNumber]!.value =
+                remaining.isNegative ? Duration.zero : remaining;
+          }
+        }
+      }
+    });
+  }
+
+  ValueNotifier<Duration>? getCountdownNotifier(String lessonNumber) {
+    return countdownNotifiers[lessonNumber];
+  }
+
+  static String formatDurationDaysHours(Duration d) {
+    final days = d.inDays;
+    final hours = d.inHours % 24;
+    return '${days} хоног : ${hours} цаг';
+  }
+
+  // Format Duration → String
+  static String formatDuration(Duration d) {
+    final days = d.inDays;
+    final hours = d.inHours % 24;
+    final minutes = d.inMinutes % 60;
+    final seconds = d.inSeconds % 60;
+    return '${days} өдөр : ${hours} цаг : ${minutes} мин : ${seconds} : сек';
   }
 }

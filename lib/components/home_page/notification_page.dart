@@ -20,30 +20,33 @@ class NotificationPage extends StatelessWidget {
               bottomRight: Radius.circular(20),
             ),
           ),
-          padding: const EdgeInsets.all(20.0),
           child: SafeArea(
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  children: [
-                    Image.asset(
+            child: Padding(
+              padding: const EdgeInsets.only(left: 20, bottom: 10),
+              child: Row(
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: Image.asset(
                       'assets/images/left.png',
-                      width: 45,
-                      height: 45,
+                      width: 30,
+                      height: 30,
                     ),
-                    const SizedBox(width: 10),
-                    const Text(
-                      'Мэдэгдэл',
-                      style: TextStyle(
-                        fontSize: 17,
-                        fontWeight: FontWeight.w600,
-                        height: 27 / 16,
-                      ),
+                  ),
+                  const SizedBox(width: 10),
+                  const Text(
+                    'Мэдэгдэл',
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      height: 18.54 / 16,
+                      color: Color(0xFF33547D),
                     ),
-                  ],
-                ),
-              ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
