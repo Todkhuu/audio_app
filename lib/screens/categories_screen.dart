@@ -1,6 +1,5 @@
 import 'package:audio_app_2/components/categories/categories_row.dart';
 import 'package:audio_app_2/components/categories/lessons_list.dart';
-import 'package:audio_app_2/screens/lessons_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:audio_app_2/managers/page_manager.dart';
 import 'package:audio_app_2/managers/categories_controller.dart';
@@ -93,15 +92,6 @@ class _CategoriesScreenState extends State<CategoriesScreen>
                 child: LessonsList(
                   controller: controller,
                   pageManager: widget.pageManager,
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) =>
-                            LessonsScreen(pageManager: widget.pageManager),
-                      ),
-                    );
-                  },
                 ),
               ),
             ],

@@ -2,6 +2,7 @@ import 'package:audio_app_2/components/categories/lesson_list_item_widget.dart';
 import 'package:audio_app_2/components/categories/lessons_empty_state_widget.dart';
 import 'package:audio_app_2/managers/categories_controller.dart';
 import 'package:audio_app_2/managers/page_manager.dart';
+import 'package:audio_app_2/screens/lessons_screen.dart';
 import 'package:flutter/material.dart';
 
 class LessonsList extends StatelessWidget {
@@ -9,11 +10,9 @@ class LessonsList extends StatelessWidget {
     super.key,
     required this.controller,
     required this.pageManager,
-    required this.onTap,
   });
   final CategoriesController controller;
   final PageManager pageManager;
-  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +29,15 @@ class LessonsList extends StatelessWidget {
         return LessonListItemWidget(
           lesson: lesson,
           pageManager: pageManager,
-          onTap: onTap,
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                    LessonsScreen(pageManager: pageManager, lesson: lesson),
+              ),
+            );
+          },
         );
       },
     );

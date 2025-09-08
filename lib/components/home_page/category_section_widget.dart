@@ -56,8 +56,10 @@ class CategorySectionWidget extends StatelessWidget {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) =>
-                            LessonsScreen(pageManager: pageManager),
+                        builder: (context) => LessonsScreen(
+                          pageManager: pageManager,
+                          lesson: lesson,
+                        ),
                       ),
                     );
                   },
