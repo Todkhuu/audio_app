@@ -45,7 +45,6 @@ class PageManager {
       remainingDays: '5',
       price: 289000,
       category: "Эрүүл мэнд",
-      endTime: DateTime.now().add(const Duration(days: 15)),
       rate: 4.5,
     ),
     AudioLesson(
@@ -62,7 +61,6 @@ class PageManager {
       remainingDays: '10',
       price: 258300,
       category: "Эрүүл мэнд",
-      endTime: DateTime.now().add(const Duration(minutes: 1)),
       rate: 5,
     ),
     AudioLesson(
@@ -79,7 +77,6 @@ class PageManager {
       remainingDays: '7',
       price: 199000,
       category: "Нэмэлт сургалт",
-      endTime: DateTime.now().add(const Duration(minutes: 15)),
       rate: 4,
     ),
     AudioLesson(

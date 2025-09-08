@@ -9,9 +9,11 @@ class LessonsList extends StatelessWidget {
     super.key,
     required this.controller,
     required this.pageManager,
+    required this.onTap,
   });
   final CategoriesController controller;
   final PageManager pageManager;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +30,7 @@ class LessonsList extends StatelessWidget {
         return LessonListItemWidget(
           lesson: lesson,
           pageManager: pageManager,
-          onTap: () => (),
+          onTap: onTap,
         );
       },
     );

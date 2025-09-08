@@ -9,7 +9,7 @@ class CategoriesRow extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.only(top: 20),
+      padding: const EdgeInsets.only(top: 15, bottom: 15),
       child: Row(
         children: [
           Expanded(
