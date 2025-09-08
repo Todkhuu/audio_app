@@ -13,6 +13,7 @@ class AudioLesson {
   final String remainingDays;
   final String category;
   final DateTime? endTime;
+  final double? rate;
 
   AudioLesson({
     required this.title,
@@ -29,5 +30,6 @@ class AudioLesson {
     required this.remainingDays,
     required this.category,
     this.endTime,
+    this.rate,
   });
 }

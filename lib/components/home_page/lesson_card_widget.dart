@@ -37,7 +37,10 @@ class LessonCardWidget extends StatelessWidget {
                 // Main content row (Image + Info)
                 Row(
                   children: [
-                    LessonImageWidget(imageUrl: lesson.image),
+                    LessonImageWidget(
+                      imageUrl: lesson.image,
+                      rate: lesson.rate ?? 0.0,
+                    ),
                     const SizedBox(width: 10),
                     Expanded(
                       child: LessonInfoWidget(

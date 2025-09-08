@@ -46,6 +46,7 @@ class PageManager {
       price: 289000,
       category: "Эрүүл мэнд",
       endTime: DateTime.now().add(const Duration(days: 15)),
+      rate: 4.5,
     ),
     AudioLesson(
       title: "Эдгэрэлийн дасгалжуулалт",
@@ -61,9 +62,9 @@ class PageManager {
       remainingDays: '10',
       price: 258300,
       category: "Эрүүл мэнд",
+      endTime: DateTime.now().add(const Duration(minutes: 1)),
+      rate: 5,
     ),
-
-    // ✅ ШИНЭ MOCK DATA
     AudioLesson(
       title: "Хариу Мэдүүлэг",
       lessonName: 'Бясалгал 3',
@@ -78,6 +79,8 @@ class PageManager {
       remainingDays: '7',
       price: 199000,
       category: "Нэмэлт сургалт",
+      endTime: DateTime.now().add(const Duration(minutes: 15)),
+      rate: 4,
     ),
     AudioLesson(
       title: "хүсэл бүтээх хүч",
@@ -93,6 +96,7 @@ class PageManager {
       remainingDays: '12',
       price: 0,
       category: "Үнэгүй сургалт",
+      rate: 3.5,
     ),
     AudioLesson(
       title: "мөнгөний мантра",
@@ -108,6 +112,8 @@ class PageManager {
       remainingDays: '15',
       price: 150000,
       category: "Хөнгөлөлттэй сургалт",
+      endTime: DateTime.now().add(const Duration(minutes: 20)),
+      rate: 3,
     ),
   ];
 

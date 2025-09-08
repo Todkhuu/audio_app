@@ -25,6 +25,7 @@ class LessonInfoWidget extends StatelessWidget {
             fontWeight: FontWeight.w600,
             fontSize: 12,
             height: 15 / 14,
+            color: Color(0xFF33547D),
           ),
           maxLines: 2,
           overflow: TextOverflow.ellipsis,

@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
         scaffoldBackgroundColor: const Color(0xFFf2f5f7),
         appBarTheme: const AppBarTheme(
           backgroundColor: Colors.white,
-          surfaceTintColor: Colors.transparent, // Энэ нь чухал!
+          surfaceTintColor: Colors.transparent,
           elevation: 1,
         ),
         textTheme: GoogleFonts.montserratTextTheme(Theme.of(context).textTheme),

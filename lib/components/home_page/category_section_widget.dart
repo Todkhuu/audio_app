@@ -1,10 +1,11 @@
-// widgets/category_section_widget.dart
+// widgets/category_section_widget.dart - Updated
 import 'package:audio_app_2/components/home_page/category_header_widget.dart';
 import 'package:audio_app_2/components/home_page/lesson_card_widget.dart';
+import 'package:audio_app_2/screens/lessons_screen.dart';
+import 'package:audio_app_2/screens/categories_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:audio_app_2/managers/page_manager.dart';
 import 'package:audio_app_2/models/audio_lesson.dart';
-import 'package:audio_app_2/screens/lessons_screen.dart';
 
 class CategorySectionWidget extends StatelessWidget {
   const CategorySectionWidget({
@@ -32,7 +33,8 @@ class CategorySectionWidget extends StatelessWidget {
               Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => LessonsScreen(pageManager: pageManager),
+                  builder: (context) =>
+                      CategoriesScreen(pageManager: pageManager),
                 ),
               );
             },
