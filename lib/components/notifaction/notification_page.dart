@@ -1,4 +1,4 @@
-import 'package:audio_app_2/components/home_page/notification_card.dart';
+import 'package:audio_app_2/components/notifaction/notification_card.dart';
 import 'package:audio_app_2/services/notification_service.dart';
 import 'package:flutter/material.dart';
 

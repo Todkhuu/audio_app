@@ -1,4 +1,4 @@
-import 'package:audio_app_2/components/home_page/notification_page.dart';
+import 'package:audio_app_2/components/notifaction/notification_page.dart';
 import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -16,7 +16,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             bottomRight: Radius.circular(20),
           ),
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        padding: const EdgeInsets.only(left: 20, bottom: 10, right: 20),
         child: SafeArea(
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,

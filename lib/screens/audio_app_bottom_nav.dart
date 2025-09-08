@@ -1,4 +1,4 @@
-import 'package:audio_app_2/components/home_page/custom_app_bar.dart';
+import 'package:audio_app_2/components/custom_app_bar.dart';
 import 'package:audio_app_2/managers/bottom_nav_manager.dart';
 import 'package:audio_app_2/managers/page_manager.dart';
 import 'package:audio_app_2/pages/downloaded_lessons_page.dart';
