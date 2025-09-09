@@ -174,10 +174,13 @@ class EnrollmentTab extends StatelessWidget {
         if (lesson.category == 'Үнэгүй сургалт') const SizedBox(height: 20),
         BuyButton(
           price: lesson.price,
+          text: 'Худалдаж авах',
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => PaymentScreen()),
+              MaterialPageRoute(
+                builder: (context) => PaymentScreen(lesson: lesson),
+              ),
             );
           },
         ),

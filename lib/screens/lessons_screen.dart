@@ -72,7 +72,7 @@ class LessonsScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                   child: Image.asset(
                     lesson.bgImage,
-                    height: 195, // хүссэн өндөр
+                    height: 195,
                     width: double.infinity,
                     fit: BoxFit.cover,
                   ),
@@ -87,7 +87,7 @@ class LessonsScreen extends StatelessWidget {
                     vertical: 4.5,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.white, // эсвэл хүссэн color
+                    color: Colors.white,
                     borderRadius: BorderRadius.circular(7),
                   ),
                   child: Row(

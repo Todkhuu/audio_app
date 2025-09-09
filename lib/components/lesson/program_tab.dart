@@ -93,10 +93,13 @@ class ProgramTab extends StatelessWidget {
         Expanded(child: SizedBox()),
         BuyButton(
           price: lesson.price,
+          text: 'Худалдаж авах',
           onPressed: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => PaymentScreen()),
+              MaterialPageRoute(
+                builder: (context) => PaymentScreen(lesson: lesson),
+              ),
             );
           },
         ),

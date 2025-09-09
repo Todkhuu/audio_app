@@ -109,7 +109,7 @@ class PageManager {
       remainingDays: '15',
       price: 150000,
       category: "Хөнгөлөлттэй сургалт",
-      endTime: DateTime.now().add(const Duration(minutes: 20)),
+      endTime: DateTime.now().add(const Duration(days: 20)),
       rate: 3,
     ),
   ];
