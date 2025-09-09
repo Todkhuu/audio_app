@@ -1,5 +1,5 @@
 import 'package:audio_app_2/managers/auth_manager.dart';
-import 'package:audio_app_2/screens/audio_app_bottom_nav.dart';
+import 'package:audio_app_2/screens/bottom_navigation_bar/audio_app_bottom_nav.dart';
 import 'package:audio_app_2/screens/auth/widgets/face_id_dialog.dart';
 import 'package:audio_app_2/utils/input_decoration_helper.dart';
 import 'package:audio_app_2/utils/validators.dart';
