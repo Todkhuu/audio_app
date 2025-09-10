@@ -1,3 +1,4 @@
+import 'package:audio_app_2/shared/styled_text.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:audio_app_2/managers/auth_manager.dart';
@@ -42,18 +43,9 @@ class FaceIDDialog {
               const SizedBox(height: 40),
 
               // Текст
-              const SizedBox(
+              SizedBox(
                 width: 145,
-                child: Text(
-                  'Та Face ID ашиглан нэвтрэх үү?',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    fontWeight: FontWeight.w600,
-                    fontSize: 14,
-                    color: Color(0xFF33547D),
-                    height: 20 / 14,
-                  ),
-                ),
+                child: StyledBodyText('Та Face ID ашиглан нэвтрэх үү?'),
               ),
 
               const SizedBox(height: 12),
@@ -80,7 +72,7 @@ class FaceIDDialog {
                           Set<MaterialState> states,
                         ) {
                           if (states.contains(MaterialState.selected)) {
-                            return const Color(0xFF33547D);
+                            return Color(0xFF33547D);
                           }
                           return Colors.white;
                         }),
@@ -98,10 +90,7 @@ class FaceIDDialog {
                       );
                     },
                   ),
-                  const Text(
-                    'Дахиж харуулахгүй байх',
-                    style: TextStyle(fontSize: 12, color: Color(0xFFA9B0BB)),
-                  ),
+                  StyledThinGreyText('Дахиж харуулахгүй байх'),
                 ],
               ),
             ],

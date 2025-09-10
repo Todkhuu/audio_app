@@ -1,6 +1,7 @@
 import 'package:audio_app_2/screens/lesson/widgets/buy_button.dart';
 import 'package:audio_app_2/models/audio_lesson.dart';
 import 'package:audio_app_2/screens/payment/payment_screen.dart';
+import 'package:audio_app_2/shared/styled_text.dart';
 import 'package:flutter/material.dart';
 
 class DescriptionTab extends StatelessWidget {
@@ -13,16 +14,8 @@ class DescriptionTab extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: const EdgeInsets.only(top: 16, bottom: 14),
-          child: Text(
-            'Хөтөлбөрийн тайлбар',
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 14,
-              height: 27 / 14,
-              color: Color(0xFF33547D),
-            ),
-          ),
+          padding: const EdgeInsets.only(top: 18, bottom: 16),
+          child: StyledBodyText('Хөтөлбөрийн тайлбар'),
         ),
         Text(
           'Энэ хичээлээр та хүндэрсэн өвчтэй хүмүүс ямар аргаар эмчлэгдэж, өвчнийхөө гүн сэтгэлзүйн шалтгааныг хэрхэн олсныг сонсоно. Ингэснээр бидний дотор хадгалагдсан гүн гүнзгий гомдол, шийдээгүй сэтгэл санааны дарамт нь бие махбодид хэрхэн хорт нөлөө үзүүлж, өвчин болон сөрөг үр дагавар үүсгэдгийг ойлгож мэдрэх болно. Хүн уур, гомдлоо удаан хадгалбал дархлаа сулрах, эрч хүч буурах, улмаар бие махбодын янз бүрийн эмгэгийн шалтгаан болж байгааг та ойлгож авна.',

@@ -1,4 +1,3 @@
-// widgets/category_section_widget.dart - Updated
 import 'package:audio_app_2/screens/bottom_navigation_bar/home/category_header_widget.dart';
 import 'package:audio_app_2/screens/bottom_navigation_bar/home/lesson_card_widget.dart';
 import 'package:audio_app_2/screens/lesson/lessons_screen.dart';
@@ -39,7 +38,6 @@ class CategorySectionWidget extends StatelessWidget {
               );
             },
           ),
-          // Lessons horizontal scroll
           SizedBox(
             height: lessons.any((lesson) => lesson.category != "Үнэгүй сургалт")
                 ? 165

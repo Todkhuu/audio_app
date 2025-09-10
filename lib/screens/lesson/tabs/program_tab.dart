@@ -15,14 +15,6 @@ class ProgramTab extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    String formatDuration(Duration duration) {
-      String twoDigits(int n) => n.toString().padLeft(2, '0');
-      final hours = twoDigits(duration.inHours.remainder(12));
-      final minutes = twoDigits(duration.inMinutes.remainder(60));
-      final seconds = twoDigits(duration.inSeconds.remainder(60));
-      return "$hours:$minutes:$seconds";
-    }
-
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -77,7 +69,7 @@ class ProgramTab extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      "${lesson.lessonNumber} • ${lesson.startTime} • ${formatDuration(lesson.duration)}",
+                      "${lesson.lessonNumber} • ${lesson.startTime} • ${PageManager.formatDurations(lesson.duration)}",
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w400,

@@ -1,4 +1,5 @@
 import 'package:audio_app_2/screens/notifaction/notification_screen.dart';
+import 'package:audio_app_2/shared/styled_text.dart';
 import 'package:flutter/material.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -29,15 +30,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                     height: 30,
                   ),
                   const SizedBox(width: 10),
-                  const Text(
-                    'Jargaa',
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 14,
-                      height: 18.54 / 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
+                  StyledBodyText('Jargaa'),
                 ],
               ),
               Stack(

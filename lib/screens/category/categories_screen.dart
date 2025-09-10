@@ -1,3 +1,4 @@
+import 'package:audio_app_2/common/screens_header.dart';
 import 'package:audio_app_2/screens/category/widgets/categories_row.dart';
 import 'package:audio_app_2/screens/category/widgets/lessons_list.dart';
 import 'package:flutter/material.dart';
@@ -41,47 +42,7 @@ class _CategoriesScreenState extends State<CategoriesScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Color(0xFFf2f5f7),
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(kToolbarHeight + 20),
-        child: Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(20),
-              bottomRight: Radius.circular(20),
-            ),
-          ),
-          child: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 20),
-              child: Row(
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    icon: Image.asset(
-                      'assets/images/left.png',
-                      width: 30,
-                      height: 30,
-                    ),
-                  ),
-                  const SizedBox(width: 0),
-                  const Text(
-                    'Сургалтууд',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      height: 18.54 / 16,
-                      color: Color(0xFF33547D),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
+      appBar: ScreensHeader(text: 'Сургалтууд'),
       body: ListenableBuilder(
         listenable: controller,
         builder: (context, child) {

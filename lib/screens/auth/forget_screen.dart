@@ -1,24 +1,20 @@
-import 'package:audio_app_2/screens/auth/signup_steps/signup_fifth.dart';
-import 'package:audio_app_2/screens/auth/signup_steps/signup_first.dart';
-import 'package:audio_app_2/screens/auth/signup_steps/signup_fourth.dart';
-import 'package:audio_app_2/screens/auth/signup_steps/signup_second.dart';
-import 'package:audio_app_2/screens/auth/signup_steps/signup_third.dart';
+import 'package:audio_app_2/screens/auth/forget_steps/forget_first.dart';
+import 'package:audio_app_2/screens/auth/forget_steps/forget_second.dart';
+import 'package:audio_app_2/screens/auth/forget_steps/forget_third.dart';
 import 'package:audio_app_2/screens/auth/widgets/next_screen.dart';
 import 'package:audio_app_2/screens/auth/widgets/step_header.dart';
 import 'package:flutter/material.dart';
 
-class SignupScreen extends StatefulWidget {
-  const SignupScreen({super.key});
+class ForgetScreen extends StatefulWidget {
+  const ForgetScreen({super.key});
   @override
-  SignupScreenState createState() => SignupScreenState();
+  ForgetScreenState createState() => ForgetScreenState();
 }
 
-class SignupScreenState extends State<SignupScreen> {
+class ForgetScreenState extends State<ForgetScreen> {
   final PageController _pageController = PageController();
-  final totalSteps = 5;
+  final totalSteps = 3;
   final _formKeys = [
-    GlobalKey<FormState>(),
-    GlobalKey<FormState>(),
     GlobalKey<FormState>(),
     GlobalKey<FormState>(),
     GlobalKey<FormState>(),
@@ -68,11 +64,9 @@ class SignupScreenState extends State<SignupScreen> {
                   currentStepNotifier.value = index + 1;
                 },
                 children: [
-                  SignupFirst(formKey: _formKeys[0]),
-                  SignupSecond(formKey: _formKeys[1]),
-                  SignupThird(formKey: _formKeys[2]),
-                  SignupFourth(formKey: _formKeys[3]),
-                  SignupFifth(formKey: _formKeys[4]),
+                  ForgetFirst(formKey: _formKeys[0]),
+                  ForgetSecond(formKey: _formKeys[1]),
+                  ForgetThird(formKey: _formKeys[2]),
                 ],
               ),
             ),
@@ -138,11 +132,7 @@ class SignupScreenState extends State<SignupScreen> {
                             currentStep == 1
                                 ? 'Үргэлжлүүлэх'
                                 : currentStep == 2
-                                ? ''
-                                : currentStep == 3
-                                ? 'Код оруулах'
-                                : currentStep == 4
-                                ? ''
+                                ? 'Баталгаажуулах'
                                 : 'Үргэлжлүүлэх',
                             style: TextStyle(
                               fontWeight: FontWeight.w600,

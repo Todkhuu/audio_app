@@ -1,6 +1,8 @@
 import 'package:audio_app_2/managers/auth_manager.dart';
+import 'package:audio_app_2/screens/auth/forget_screen.dart';
 import 'package:audio_app_2/screens/bottom_navigation_bar/audio_app_bottom_nav.dart';
 import 'package:audio_app_2/screens/auth/widgets/face_id_dialog.dart';
+import 'package:audio_app_2/shared/styled_text.dart';
 import 'package:audio_app_2/utils/input_decoration_helper.dart';
 import 'package:audio_app_2/utils/validators.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +37,6 @@ class _LoginFormState extends State<LoginForm> {
         mainAxisSize: MainAxisSize.min,
         children: [
           const SizedBox(height: 45),
-
           TextFormField(
             controller: _identifierController,
             decoration: InputDecorationHelper().buildInputDecoration(
@@ -56,96 +57,87 @@ class _LoginFormState extends State<LoginForm> {
           Align(
             alignment: Alignment.centerRight,
             child: TextButton(
-              onPressed: () {},
-              child: const Text(
-                'Нууц үг мартсан',
-                style: TextStyle(
-                  fontWeight: FontWeight.w400,
-                  fontSize: 12,
-                  color: Color(0xFFA9B0BB),
-                ),
-              ),
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ForgetScreen()),
+                );
+              },
+              child: StyledThinGreyText('Нууц үг мартсан'),
             ),
           ),
-
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Нэвтрэх товч
               Row(
                 children: [
-                  ElevatedButton(
-                    onPressed: () async {
-                      if (_formKey.currentState!.validate()) {
-                        await authManager.login(
-                          _identifierController.text.trim(),
-                          _passwordController.text,
-                        );
-
-                        if (authManager.errorMessage != null) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(content: Text(authManager.errorMessage!)),
+                  SizedBox(
+                    width: 245,
+                    height: 50,
+                    child: ElevatedButton(
+                      onPressed: () async {
+                        if (_formKey.currentState!.validate()) {
+                          await authManager.login(
+                            _identifierController.text.trim(),
+                            _passwordController.text,
                           );
-                        } else {
-                          // Амжилттай нэвтэрсэн бол
-                          Navigator.pushReplacement(
+                          Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => const AudioAppBottomNav(),
                             ),
                           );
                         }
-                      }
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF33547D),
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 100,
-                        vertical: 20,
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0xFF33547D),
+                        foregroundColor: Colors.white,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(15),
+                        ),
+                        elevation: 0,
                       ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(15),
-                      ),
-                      elevation: 0,
+                      child: authManager.isLoading
+                          ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(
+                                color: Colors.white,
+                                strokeWidth: 2,
+                              ),
+                            )
+                          : const Text(
+                              "Нэвтрэх",
+                              style: TextStyle(fontSize: 14),
+                            ),
                     ),
-                    child: authManager.isLoading
-                        ? const SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(
-                              color: Colors.white,
-                              strokeWidth: 2,
-                            ),
-                          )
-                        : const Text(
-                            "Нэвтрэх",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w600,
-                              fontSize: 14,
-                            ),
-                          ),
                   ),
                 ],
               ),
 
               const SizedBox(width: 10),
 
-              IconButton(
-                icon: Image.asset('assets/images/auth/face.png', width: 24),
-                tooltip: "Face ID-ээр нэвтрэх",
-                style: IconButton.styleFrom(
-                  backgroundColor: const Color(0xFF33547D),
-                  foregroundColor: Colors.white,
-                  padding: const EdgeInsets.all(18),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(15),
+              SizedBox(
+                width: 50,
+                height: 50,
+                child: IconButton(
+                  icon: Image.asset('assets/images/auth/face.png', width: 24),
+                  tooltip: "Face ID-ээр нэвтрэх",
+                  style: IconButton.styleFrom(
+                    backgroundColor: Color(0xFF33547D),
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(15),
+                    ),
+                    elevation: 0,
                   ),
-                  elevation: 0,
+                  onPressed: () {
+                    FaceIDDialog.show(
+                      context: context,
+                      authManager: authManager,
+                    );
+                  },
                 ),
-                onPressed: () {
-                  FaceIDDialog.show(context: context, authManager: authManager);
-                },
               ),
             ],
           ),

@@ -24,6 +24,7 @@ class LessonCardWidget extends StatelessWidget {
       width: 270,
       margin: const EdgeInsets.only(right: 15),
       child: Card(
+        elevation: 0,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         color: Colors.white,
         child: InkWell(
@@ -34,7 +35,6 @@ class LessonCardWidget extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                // Main content row (Image + Info)
                 Row(
                   children: [
                     LessonImageWidget(
@@ -52,7 +52,6 @@ class LessonCardWidget extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 10),
-                // Discount timer (only for paid lessons)
                 if (lesson.category != "Үнэгүй сургалт")
                   DiscountTimerWidget(lesson: lesson, pageManager: pageManager),
               ],

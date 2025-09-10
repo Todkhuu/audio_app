@@ -1,4 +1,5 @@
 import 'package:audio_app_2/screens/auth/signup_screen.dart';
+import 'package:audio_app_2/shared/styled_text.dart';
 import 'package:flutter/material.dart';
 
 class LoginFooter extends StatelessWidget {
@@ -29,14 +30,8 @@ class LoginFooter extends StatelessWidget {
             minimumSize: Size.zero,
             tapTargetSize: MaterialTapTargetSize.shrinkWrap,
           ),
-          child: Text(
-            'Бүртгүүлэх',
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 14,
-              color: Color(0xFF33547D),
-            ),
-          ),
+
+          child: StyledBodyText('Бүртгүүлэх'),
         ),
       ],
     );

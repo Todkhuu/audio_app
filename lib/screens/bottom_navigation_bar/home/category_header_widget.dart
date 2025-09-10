@@ -1,4 +1,5 @@
 // widgets/category_header_widget.dart
+import 'package:audio_app_2/shared/styled_text.dart';
 import 'package:flutter/material.dart';
 
 class CategoryHeaderWidget extends StatelessWidget {
@@ -20,24 +21,8 @@ class CategoryHeaderWidget extends StatelessWidget {
       children: [
         Row(
           children: [
-            Text(
-              categoryName,
-              style: const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w600,
-                color: Color(0xFF33547D),
-                height: 27 / 14,
-              ),
-            ),
-            Text(
-              ' ($lessonCount)',
-              style: const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w400,
-                color: Color(0xFFA9B0BB),
-                height: 27 / 14,
-              ),
-            ),
+            StyledSmallBodyText(categoryName),
+            StyledThinGreyText(' ($lessonCount)'),
           ],
         ),
         IconButton(

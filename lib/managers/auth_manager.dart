@@ -5,12 +5,10 @@ import '../models/user_model.dart';
 class AuthManager extends ChangeNotifier {
   bool _isLoggedIn = false;
   bool _isLoading = false;
-  String? _errorMessage;
   bool _dontShowAgain = false;
 
   bool get isLoggedIn => _isLoggedIn;
   bool get isLoading => _isLoading;
-  String? get errorMessage => _errorMessage;
   bool get dontShowAgain => _dontShowAgain;
 
   User? _user;
@@ -26,12 +24,10 @@ class AuthManager extends ChangeNotifier {
   // 4 оронтой код илгээх simulation (signup-д)
   Future<void> sendCode(String phone) async {
     _isLoading = true;
-    _errorMessage = null;
     notifyListeners();
 
     await Future.delayed(const Duration(seconds: 1));
     _sentCode = (1000 + Random().nextInt(9000)).toString();
-    print("Simulation: sent code $_sentCode to $phone");
 
     _isLoading = false;
     notifyListeners();
@@ -39,7 +35,6 @@ class AuthManager extends ChangeNotifier {
 
   Future<void> signupVerify(String phone, String code) async {
     _isLoading = true;
-    _errorMessage = null;
     notifyListeners();
 
     await Future.delayed(const Duration(seconds: 1));
@@ -47,7 +42,6 @@ class AuthManager extends ChangeNotifier {
       _user = User(identifier: phone, password: '', code: code);
       _isLoggedIn = true;
     } else {
-      _errorMessage = "Код буруу байна";
       _isLoggedIn = false;
     }
 
@@ -58,7 +52,6 @@ class AuthManager extends ChangeNotifier {
   // Login simulation
   Future<void> login(String identifier, String password) async {
     _isLoading = true;
-    _errorMessage = null;
     notifyListeners();
 
     await Future.delayed(const Duration(seconds: 1));

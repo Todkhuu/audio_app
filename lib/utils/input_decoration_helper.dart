@@ -15,7 +15,7 @@ class InputDecorationHelper {
       ),
       filled: true,
       fillColor: Colors.white,
-      contentPadding: const EdgeInsets.only(left: 15, top: 23, bottom: 22),
+      contentPadding: const EdgeInsets.only(left: 15, top: 16, bottom: 16),
     );
   }
 }

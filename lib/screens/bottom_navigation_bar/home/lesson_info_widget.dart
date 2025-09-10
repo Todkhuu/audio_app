@@ -1,4 +1,5 @@
 // widgets/lesson_info_widget.dart
+import 'package:audio_app_2/shared/styled_text.dart';
 import 'package:flutter/material.dart';
 
 class LessonInfoWidget extends StatelessWidget {
@@ -18,33 +19,13 @@ class LessonInfoWidget extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Title
-        Text(
-          title,
-          style: const TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: 12,
-            height: 15 / 14,
-            color: Color(0xFF33547D),
-          ),
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-          softWrap: true,
-        ),
+        StyledSmallBodyText(title),
         const SizedBox(height: 21),
-        // Mentor info
         Row(
           children: [
             const Icon(Icons.person, size: 12, color: Color(0xFFCAD0D7)),
             const SizedBox(width: 5),
-            Text(
-              "Менторгүй",
-              style: const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w400,
-                color: Color(0xFFA9B0BB),
-              ),
-            ),
+            StyledThinGreyText('Менторгүй'),
           ],
         ),
         // Duration
@@ -56,15 +37,7 @@ class LessonInfoWidget extends StatelessWidget {
               color: Color(0xFFCAD0D7),
             ),
             const SizedBox(width: 5),
-            Text(
-              '$remainingDays хоног',
-              style: const TextStyle(
-                fontSize: 12,
-                fontWeight: FontWeight.w400,
-                color: Color(0xFFA9B0BB),
-              ),
-              overflow: TextOverflow.ellipsis,
-            ),
+            StyledThinGreyText('$remainingDays хоног'),
           ],
         ),
         // Price
