@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 import 'package:audio_app_2/models/audio_lesson.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -37,7 +38,8 @@ class PageManager {
       lessonNumber: "Хичээл 1",
       startTime: "06:00",
       duration: Duration.zero,
-      audioPath: 'assets/audio/good.mp3',
+      audioPath:
+          'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
       lessonDescription:
           '12-р сарын 6-ны өглөө 04 цагт хийнэ, орой 18 цагаас давтаж хийнэ.',
       image: 'assets/images/bg/setgelsmall.png',
@@ -53,7 +55,8 @@ class PageManager {
       lessonNumber: "Хичээл 2",
       startTime: "07:00",
       duration: Duration.zero,
-      audioPath: 'assets/audio/study.mp3',
+      audioPath:
+          'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
       lessonDescription:
           '12-р сарын 8-ны өглөө 04 цагт хийнэ, орой 20 цагаас давтаж хийнэ.',
       image: 'assets/images/bg/edgerelsmall.png',
@@ -69,7 +72,8 @@ class PageManager {
       lessonNumber: "Хичээл 3",
       startTime: "08:00",
       duration: Duration.zero,
-      audioPath: 'assets/audio/country.mp3',
+      audioPath:
+          'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
       lessonDescription:
           '12-р сарын 10-ны өглөө 05 цагт, орой 19 цагаас давтан хийнэ.',
       image: 'assets/images/bg/hariusmall.png',
@@ -85,7 +89,8 @@ class PageManager {
       lessonNumber: "Хичээл 4",
       startTime: "09:00",
       duration: Duration.zero,
-      audioPath: 'assets/audio/hiphop.mp3',
+      audioPath:
+          'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
       lessonDescription:
           '12-р сарын 12-ны өглөө 06 цагт, орой 21 цагаас давтан хийнэ.',
       image: 'assets/images/bg/huselsmall.png',
@@ -101,7 +106,8 @@ class PageManager {
       lessonNumber: "Хичээл 5",
       startTime: "10:00",
       duration: Duration.zero,
-      audioPath: 'assets/audio/pop.mp3',
+      audioPath:
+          'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3',
       lessonDescription:
           '12-р сарын 15-ны өглөө 07 цагт, орой 20 цагаас давтан хийнэ.',
       image: 'assets/images/bg/mongosmall.png',
@@ -132,15 +138,16 @@ class PageManager {
     _listenForChangesInBufferedPosition();
     _listenForChangesInTotalDuration();
     _listenForChangesInSequenceState();
+    _setInitialPlaylist(); // await устгасан - хоосон playlist AudioPlayer-д set хийхгүй болсон
 
     assetsLessonsNotifier.value = _assetsLessons;
   }
 
   // tag: lesson – AudioSource-д lesson объект холбож, дараа нь UI update-д ашиглана.
   Future<void> _setInitialPlaylist() async {
-    // Эхний playlist хоосон байна, шаардлагатай үедээ lesson нэмнэ
+    // Эхний playlist хоосон байна, AudioPlayer-д хоосон playlist set хийхгүй
     _playlist = ConcatenatingAudioSource(children: []);
-    await _audioPlayer.setAudioSource(_playlist);
+    // Хоосон playlist set хийхгүй - зөвхөн үүсгэх
   }
 
   // <-- 3. Listeners – Player state, position, buffer, duration, sequence track update. -->
@@ -226,6 +233,7 @@ class PageManager {
       final lesson = currentItem?.tag as AudioLesson?;
       currentLessonNotifier.value = lesson;
       final playlist = sequenceState.effectiveSequence
+          .where((item) => item.tag != null && item.tag is AudioLesson)
           .map((item) => item.tag as AudioLesson)
           .toList();
       playlistNotifier.value = playlist;
@@ -335,25 +343,27 @@ class PageManager {
     }
   }
 
-  // downloadAndPlay дотор
   Future<void> downloadAndPlay(AudioLesson lesson) async {
     try {
       final dir = await getApplicationDocumentsDirectory();
       final file = File('${dir.path}/${lesson.lessonNumber}.mp3');
 
-      // Файл байхгүй бол assets-аас хуулна
+      // Хэрэв файл байхгүй бол татах
       if (!await file.exists()) {
-        final byteData = await rootBundle.load(lesson.audioPath);
-        await file.writeAsBytes(byteData.buffer.asUint8List());
+        if (lesson.audioPath.startsWith('http')) {
+          final dio = Dio();
+          await dio.download(lesson.audioPath, file.path);
+        } else if (lesson.audioPath.startsWith('assets')) {
+          final byteData = await rootBundle.load(lesson.audioPath);
+          await file.writeAsBytes(byteData.buffer.asUint8List());
+        } else {
+          throw Exception("Алдаатай audioPath: ${lesson.audioPath}");
+        }
       }
 
       // SharedPreferences-д хадгалах
       await _saveDownloadedLesson(lesson, file.path);
-
       await _loadDownloadedLessons();
-
-      // Тоглуулах
-      await _playLocalFile(file.path, lesson);
     } catch (e) {
       print('Download болон тоглуулахад алдаа гарлаа: $e');
     }
@@ -575,5 +585,18 @@ class PageManager {
     final minutes = twoDigits(duration.inMinutes.remainder(60));
     final seconds = twoDigits(duration.inSeconds.remainder(60));
     return "$hours:$minutes:$seconds";
+  }
+
+  Future<void> playNetworkLesson(AudioLesson lesson) async {
+    try {
+      await _audioPlayer.stop();
+      await _audioPlayer.setAudioSource(
+        AudioSource.uri(Uri.parse(lesson.audioPath), tag: lesson),
+      );
+      currentLessonNotifier.value = lesson;
+      await _audioPlayer.play();
+    } catch (e) {
+      debugPrint("Network play error: $e");
+    }
   }
 }

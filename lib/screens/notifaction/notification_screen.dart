@@ -9,7 +9,7 @@ class NotificationScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color(0xFFf2f5f7),
+      backgroundColor: const Color(0xFFf2f5f7),
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(kToolbarHeight + 20),
         child: Container(
@@ -26,9 +26,7 @@ class NotificationScreen extends StatelessWidget {
               child: Row(
                 children: [
                   IconButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
+                    onPressed: () => Navigator.pop(context),
                     icon: Image.asset(
                       'assets/images/left.png',
                       width: 30,
@@ -41,7 +39,6 @@ class NotificationScreen extends StatelessWidget {
                     style: TextStyle(
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
-                      height: 18.54 / 16,
                       color: Color(0xFF33547D),
                     ),
                   ),
@@ -54,17 +51,19 @@ class NotificationScreen extends StatelessWidget {
       body: ValueListenableBuilder(
         valueListenable: _notificationService.notifications,
         builder: (context, notifications, _) {
-          if (notifications.isEmpty) {
+          if (notifications.isEmpty)
             return const Center(child: Text("Мэдэгдэл алга"));
-          }
-
           return ListView.builder(
+            padding: const EdgeInsets.only(top: 15, bottom: 15),
             itemCount: notifications.length,
             itemBuilder: (context, index) {
               final item = notifications[index];
-              return Container(
-                margin: EdgeInsets.only(top: 15),
-                child: NotificationCard(item: item),
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 15),
+                child: NotificationCard(
+                  item: item,
+                  notificationService: _notificationService,
+                ),
               );
             },
           );

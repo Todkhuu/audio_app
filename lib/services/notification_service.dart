@@ -13,51 +13,31 @@ class NotificationService {
     notifications.value = [
       NotificationItem(
         id: "1",
-        title: "Шинэ хичээл нэмэгдлээ",
-        description: "Танд зориулсан шинэ аудио хичээл нэмэгдлээ!",
+        title: "Амьдралын туршлага уулзалт эхэллээ",
+        description:
+            "Энэ уулзалт нь хүндэрсэн өвчтэй хүмүүс яаж эмчилж, өвчний сэтгэл зүйн учир шалтгааныг олсоныг нь сонсоод та гүн гүнзгий гомдол таны биед ямар уршигтай, муу үр дагавартай гэдгийг мэдэрнэ.",
         date: DateTime.now().subtract(const Duration(minutes: 10)),
-        imageUrl: null,
+        meetUrl: 'https://zoom.us/j/123456789',
       ),
       NotificationItem(
         id: "2",
-        title: "Update гарлаа",
-        description: "Шинэ хувилбар татаж авах боломжтой боллоо.",
+        title: "Тайвшрах бясалгал хичээл орлоо",
+        description: "Тайвшрах бясалгал хичээл татаж авах боломжтойгоор орлоо",
         date: DateTime.now().subtract(const Duration(hours: 3)),
-        imageUrl: null,
       ),
       NotificationItem(
         id: "3",
-        title: "Сануулах",
-        description: "Өнөөдрийн дасгал хийж амжаарай!",
+        title: "Эдгэрийн дасгалжуулалт хичээл 30 хувь хямдарлаа",
+        description:
+            "Эдгэрлийн дасгалжуулалт хичээл 30 хувь хямдарлаа. Тус хямдрал ердөө 30 хоногийн хугацаатай үргэлжилнэ",
         date: DateTime.now().subtract(const Duration(days: 1)),
       ),
     ];
   }
 
-  void addNotification(NotificationItem item) {
-    final currentList = List<NotificationItem>.from(notifications.value);
-    currentList.insert(0, item);
-    notifications.value = currentList;
-  }
-
   void markAsRead(String id) {
-    final updated = notifications.value.map((n) {
-      if (n.id == id) {
-        return NotificationItem(
-          id: n.id,
-          title: n.title,
-          description: n.description,
-          date: n.date,
-          imageUrl: n.imageUrl,
-          isRead: true,
-        );
-      }
-      return n;
-    }).toList();
-    notifications.value = updated;
-  }
-
-  void clearAll() {
-    notifications.value = [];
+    notifications.value = notifications.value
+        .map((n) => n.id == id ? n.copyWith(isRead: true) : n)
+        .toList();
   }
 }

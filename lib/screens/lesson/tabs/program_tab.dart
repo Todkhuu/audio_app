@@ -2,6 +2,7 @@ import 'package:audio_app_2/screens/lesson/widgets/buy_button.dart';
 import 'package:audio_app_2/managers/page_manager.dart';
 import 'package:audio_app_2/models/audio_lesson.dart';
 import 'package:audio_app_2/screens/payment/payment_screen.dart';
+import 'package:audio_app_2/screens/player/player_screen.dart';
 import 'package:flutter/material.dart';
 
 class ProgramTab extends StatelessWidget {
@@ -75,6 +76,20 @@ class ProgramTab extends StatelessWidget {
                         fontWeight: FontWeight.w400,
                         color: Color(0xFFA9B0BB),
                       ),
+                    ),
+                    TextButton(
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PlayerScreen(
+                              lesson: lesson,
+                              pageManager: pageManager,
+                            ),
+                          ),
+                        );
+                      },
+                      child: Text('play'),
                     ),
                   ],
                 ),

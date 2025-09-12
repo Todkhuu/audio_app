@@ -1,3 +1,4 @@
+import 'package:audio_app_2/common/screens_header.dart';
 import 'package:audio_app_2/screens/player/widgets/action_buttons.dart';
 import 'package:audio_app_2/screens/player/widgets/audio_control_buttons.dart';
 import 'package:audio_app_2/screens/player/widgets/lesson_info.dart';
@@ -30,11 +31,16 @@ class _PlayerScreenState extends State<PlayerScreen> {
   }
 
   void _playLesson() async {
-    // Assets файл эсэх шалгах
-    if (widget.lesson.audioPath.startsWith('assets')) {
+    final path = widget.lesson.audioPath;
+
+    if (path.startsWith('assets')) {
+      // assets дээрх аудио
       await widget.pageManager.playAssetLesson(widget.lesson);
+    } else if (path.startsWith('http')) {
+      // network URL
+      await widget.pageManager.playNetworkLesson(widget.lesson);
     } else {
-      // Download хийгдсэн файл
+      // татаж авсан local файл
       await widget.pageManager.playDownloadedLesson(widget.lesson);
     }
   }
@@ -42,7 +48,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: const CustomLessonAppBar(title: 'Өдөр 3'),
+      appBar: ScreensHeader(text: 'Өдөр 3'),
       body: Padding(
         padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
         child: Column(
