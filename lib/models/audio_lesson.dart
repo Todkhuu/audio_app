@@ -1,4 +1,5 @@
 class AudioLesson {
+  final String id;
   final String title;
   final String lessonName;
   final String lessonNumber;
@@ -16,6 +17,7 @@ class AudioLesson {
   final double? rate;
 
   AudioLesson({
+    required this.id,
     required this.title,
     required this.lessonName,
     required this.lessonNumber,

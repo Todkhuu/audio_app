@@ -33,6 +33,7 @@ class PageManager {
   // Assets файлуудын жагсаалт
   final List<AudioLesson> _assetsLessons = [
     AudioLesson(
+      id: '1',
       title: "Сэтгэлийн хүчээ мэдэр",
       lessonName: 'Бясалгал 1',
       lessonNumber: "Хичээл 1",
@@ -50,6 +51,7 @@ class PageManager {
       rate: 4.5,
     ),
     AudioLesson(
+      id: '2',
       title: "Эдгэрэлийн дасгалжуулалт",
       lessonName: 'Бясалгал 2',
       lessonNumber: "Хичээл 2",
@@ -67,6 +69,7 @@ class PageManager {
       rate: 5,
     ),
     AudioLesson(
+      id: '3',
       title: "Хариу Мэдүүлэг",
       lessonName: 'Бясалгал 3',
       lessonNumber: "Хичээл 3",
@@ -84,6 +87,7 @@ class PageManager {
       rate: 4,
     ),
     AudioLesson(
+      id: '4',
       title: "хүсэл бүтээх хүч",
       lessonName: 'Бясалгал 4',
       lessonNumber: "Хичээл 4",
@@ -101,6 +105,7 @@ class PageManager {
       rate: 3.5,
     ),
     AudioLesson(
+      id: '5',
       title: "мөнгөний мантра",
       lessonName: 'Бясалгал 5',
       lessonNumber: "Хичээл 5",
@@ -208,6 +213,7 @@ class PageManager {
       final lesson = currentLessonNotifier.value;
       if (lesson != null) {
         currentLessonNotifier.value = AudioLesson(
+          id: lesson.id,
           title: lesson.title,
           lessonName: lesson.lessonName,
           lessonNumber: lesson.lessonNumber,
@@ -406,6 +412,7 @@ class PageManager {
   // Download хийсэн lesson устгах
   Future<void> _playLocalFile(String filePath, AudioLesson lesson) async {
     final updatedLesson = AudioLesson(
+      id: lesson.id,
       title: lesson.title,
       lessonName: lesson.lessonName,
       lessonNumber: lesson.lessonNumber,
@@ -436,6 +443,7 @@ class PageManager {
     final downloadedLessons = downloads.map((d) {
       final json = jsonDecode(d);
       return AudioLesson(
+        id: json['id'] ?? '',
         title: json['title'] ?? '',
         lessonName: json['lessonName'] ?? '',
         lessonNumber: json['lessonNumber'] ?? '',
@@ -520,8 +528,8 @@ class PageManager {
   }
 
   Map<String, List<AudioLesson>> getLessonsByCategory() {
-    final allLessons =
-        assetsLessonsNotifier.value + downloadedLessonsNotifier.value;
+    final allLessons = assetsLessonsNotifier.value;
+    // + downloadedLessonsNotifier.value
     final Map<String, List<AudioLesson>> categories = {};
 
     for (var lesson in allLessons) {

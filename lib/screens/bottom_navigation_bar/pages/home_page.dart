@@ -17,7 +17,7 @@ class HomePage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const BannerWidget(),
+            BannerWidget(),
             ValueListenableBuilder<List<AudioLesson>>(
               valueListenable: pageManager.assetsLessonsNotifier,
               builder: (context, _, __) {

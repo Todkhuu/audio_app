@@ -1,3 +1,4 @@
+import 'package:audio_app_2/managers/page_manager.dart';
 import 'package:audio_app_2/screens/bottom_navigation_bar/profile/profile_widget.dart';
 import 'package:audio_app_2/screens/e_barimt/e_barimt_screen.dart';
 import 'package:audio_app_2/screens/my_profile/my_profile_screen.dart';
@@ -9,6 +10,7 @@ class ProfilePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final PageManager pageManager = PageManager();
     return Scaffold(
       appBar: PreferredSize(
         preferredSize: const Size.fromHeight(kToolbarHeight + 20),
@@ -70,7 +72,10 @@ class ProfilePage extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => EBarimtScreen()),
+                  MaterialPageRoute(
+                    builder: (context) =>
+                        EBarimtScreen(pageManager: pageManager),
+                  ),
                 );
               },
             ),

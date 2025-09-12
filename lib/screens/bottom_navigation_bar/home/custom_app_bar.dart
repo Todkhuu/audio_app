@@ -1,4 +1,6 @@
+import 'package:audio_app_2/models/notification_item.dart';
 import 'package:audio_app_2/screens/notifaction/notification_screen.dart';
+import 'package:audio_app_2/services/notification_service.dart';
 import 'package:audio_app_2/shared/styled_text.dart';
 import 'package:flutter/material.dart';
 
@@ -55,23 +57,32 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                   Positioned(
                     top: 1,
                     right: 2,
-                    child: Container(
-                      width: 23,
-                      height: 19,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(55),
-                        color: Color(0xFFE8553E),
-                      ),
-                      child: const Center(
-                        child: Text(
-                          '3',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 10,
-                            fontWeight: FontWeight.w600,
+                    child: ValueListenableBuilder<List<NotificationItem>>(
+                      valueListenable: NotificationService().notifications,
+                      builder: (context, notifications, child) {
+                        final unreadCount = notifications
+                            .where((n) => !n.isRead)
+                            .length;
+                        if (unreadCount == 0) return const SizedBox.shrink();
+                        return Container(
+                          width: 23,
+                          height: 19,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(55),
+                            color: const Color(0xFFE8553E),
                           ),
-                        ),
-                      ),
+                          child: Center(
+                            child: Text(
+                              '$unreadCount',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 10,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ],

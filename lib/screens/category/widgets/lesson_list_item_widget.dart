@@ -35,7 +35,7 @@ class LessonListItemWidget extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    LessonImage(image: lesson.image, rate: lesson.rate!),
+                    LessonImage(image: lesson.image, rate: lesson.rate ?? 0.0),
                     const SizedBox(width: 15.3),
                     Expanded(
                       child: LessonInfo(

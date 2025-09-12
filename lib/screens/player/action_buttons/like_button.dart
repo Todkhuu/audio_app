@@ -23,6 +23,7 @@ class LikeButton extends StatelessWidget {
             onPressed: () {
               if (lesson != null) {
                 pageManager.currentLessonNotifier.value = AudioLesson(
+                  id: lesson.id,
                   title: lesson.title,
                   lessonName: lesson.lessonName,
                   lessonNumber: lesson.lessonNumber,
