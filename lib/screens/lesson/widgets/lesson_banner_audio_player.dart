@@ -23,32 +23,29 @@ class LessonBannerAudioPlayer extends StatefulWidget {
 }
 
 class _LessonBannerAudioPlayerState extends State<LessonBannerAudioPlayer> {
-  @override
-  void initState() {
-    super.initState();
-    _playLesson();
-  }
+  final overlayController = OverlayController();
 
-  void _playLesson() async {
-    final path = widget.lesson.audioPath;
+  void _toggleOverlay() {
+    overlayController.toggle();
 
-    if (path.startsWith('assets')) {
-      // assets дээрх аудио
-      await widget.pageManager.playAssetLesson(widget.lesson);
-    } else if (path.startsWith('http')) {
-      // network URL
-      await widget.pageManager.playNetworkLesson(widget.lesson);
-    } else {
-      // татаж авсан local файл
-      await widget.pageManager.playDownloadedLesson(widget.lesson);
+    // Overlay visible болсны дараа тоглуулах
+    if (overlayController.isVisible.value) {
+      final path = widget.lesson.audioPath;
+
+      if (path.startsWith('assets')) {
+        widget.pageManager.playAssetLesson(widget.lesson);
+      } else if (path.startsWith('http')) {
+        widget.pageManager.playNetworkLesson(widget.lesson);
+      } else {
+        widget.pageManager.playDownloadedLesson(widget.lesson);
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    final overlayController = OverlayController();
     return GestureDetector(
-      onTap: overlayController.toggle,
+      onTap: _toggleOverlay,
       child: Stack(
         children: [
           // Зураг
