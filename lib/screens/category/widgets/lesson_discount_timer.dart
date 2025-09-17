@@ -1,3 +1,4 @@
+import 'package:audio_app_2/utils/format_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:audio_app_2/managers/page_manager.dart';
 
@@ -39,7 +40,7 @@ class LessonDiscountTimer extends StatelessWidget {
             valueListenable: notifier,
             builder: (context, remaining, child) {
               final text = remaining.inSeconds > 0
-                  ? PageManager.formatDuration(remaining)
+                  ? FormatHelper.formatDuration(remaining)
                   : 'Дууссан';
               return Text(
                 text,

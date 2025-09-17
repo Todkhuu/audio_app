@@ -1,7 +1,7 @@
 import 'package:audio_app_2/common/screens_header.dart';
 import 'package:audio_app_2/managers/page_manager.dart';
 import 'package:audio_app_2/models/audio_lesson.dart';
-import 'package:audio_app_2/screens/lesson/widgets/lesson_banner_image.dart';
+import 'package:audio_app_2/screens/lesson/widgets/lesson_banner_audio_player.dart';
 import 'package:audio_app_2/screens/lesson/widgets/lesson_tabs.dart';
 import 'package:flutter/material.dart';
 
@@ -22,7 +22,7 @@ class LessonsScreen extends StatelessWidget {
       appBar: ScreensHeader(text: lesson.title),
       body: Column(
         children: [
-          LessonBannerImage(lesson: lesson),
+          LessonBannerAudioPlayer(lesson: lesson, pageManager: pageManager),
           LessonTabs(lesson: lesson, pageManager: pageManager),
         ],
       ),

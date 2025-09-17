@@ -1,3 +1,4 @@
+import 'package:audio_app_2/utils/format_helper.dart';
 import 'package:flutter/material.dart';
 import 'package:audio_app_2/managers/page_manager.dart';
 import 'package:audio_app_2/models/audio_lesson.dart';
@@ -41,7 +42,7 @@ class DiscountTimerWidget extends StatelessWidget {
               )!,
               builder: (context, remaining, child) {
                 final text = remaining.inSeconds > 0
-                    ? PageManager.formatDurationDaysHours(remaining)
+                    ? FormatHelper.formatDurationDaysHours(remaining)
                     : 'Дууссан';
                 return Text(
                   text,

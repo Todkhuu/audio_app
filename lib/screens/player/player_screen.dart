@@ -48,6 +48,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: ScreensHeader(text: 'Өдөр 3'),
       body: Padding(
         padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
@@ -56,7 +57,7 @@ class _PlayerScreenState extends State<PlayerScreen> {
           children: [
             Image.asset(widget.lesson.bgImage),
             ActionButtons(pageManager: widget.pageManager),
-            LessonInfo(pageManager: widget.pageManager),
+            LessonInfo(lesson: widget.lesson),
             WaveformPainter(pageManager: widget.pageManager),
             AudioProgressBar(pageManager: widget.pageManager),
             AudioControlButtons(pageManager: widget.pageManager),

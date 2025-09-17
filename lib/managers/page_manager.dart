@@ -1,19 +1,14 @@
 import 'dart:async';
-import 'dart:convert';
+import 'package:audio_app_2/managers/download_manager.dart';
 import 'package:audio_app_2/models/audio_lesson.dart';
-import 'package:dio/dio.dart';
+import 'package:audio_app_2/utils/mock_audio_lessons.dart';
 import 'package:flutter/material.dart';
 import 'package:just_audio/just_audio.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../notifiers/play_button_notifier.dart';
 import '../notifiers/progress_notifier.dart';
 import '../notifiers/repeat_button_notifier.dart';
-import 'dart:io';
-import 'package:flutter/services.dart';
-import 'package:path_provider/path_provider.dart';
 
 class PageManager {
-  // <-- 1. State & Notifiers – UI update хийх. -->
   final currentLessonNotifier = ValueNotifier<AudioLesson?>(null);
   final playlistNotifier = ValueNotifier<List<AudioLesson>>([]);
   final assetsLessonsNotifier = ValueNotifier<List<AudioLesson>>([]);
@@ -26,104 +21,10 @@ class PageManager {
   final downloadedLessonsNotifier = ValueNotifier<List<AudioLesson>>([]);
   final selectedCategoryNotifier = ValueNotifier<String>("Бүгд");
   final countdownNotifiers = <String, ValueNotifier<Duration>>{};
+  final downloadingLessonsNotifier = ValueNotifier<Set<String>>({});
 
   late AudioPlayer _audioPlayer;
   late ConcatenatingAudioSource _playlist;
-
-  // Assets файлуудын жагсаалт
-  final List<AudioLesson> _assetsLessons = [
-    AudioLesson(
-      id: '1',
-      title: "Сэтгэлийн хүчээ мэдэр",
-      lessonName: 'Бясалгал 1',
-      lessonNumber: "Хичээл 1",
-      startTime: "06:00",
-      duration: Duration.zero,
-      audioPath:
-          'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3',
-      lessonDescription:
-          '12-р сарын 6-ны өглөө 04 цагт хийнэ, орой 18 цагаас давтаж хийнэ.',
-      image: 'assets/images/bg/setgelsmall.png',
-      bgImage: 'assets/images/bg/setgelbg.png',
-      remainingDays: '5',
-      price: 289000,
-      category: "Эрүүл мэнд",
-      rate: 4.5,
-    ),
-    AudioLesson(
-      id: '2',
-      title: "Эдгэрэлийн дасгалжуулалт",
-      lessonName: 'Бясалгал 2',
-      lessonNumber: "Хичээл 2",
-      startTime: "07:00",
-      duration: Duration.zero,
-      audioPath:
-          'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3',
-      lessonDescription:
-          '12-р сарын 8-ны өглөө 04 цагт хийнэ, орой 20 цагаас давтаж хийнэ.',
-      image: 'assets/images/bg/edgerelsmall.png',
-      bgImage: 'assets/images/bg/edgerelbg.png',
-      remainingDays: '10',
-      price: 258300,
-      category: "Эрүүл мэнд",
-      rate: 5,
-    ),
-    AudioLesson(
-      id: '3',
-      title: "Хариу Мэдүүлэг",
-      lessonName: 'Бясалгал 3',
-      lessonNumber: "Хичээл 3",
-      startTime: "08:00",
-      duration: Duration.zero,
-      audioPath:
-          'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3',
-      lessonDescription:
-          '12-р сарын 10-ны өглөө 05 цагт, орой 19 цагаас давтан хийнэ.',
-      image: 'assets/images/bg/hariusmall.png',
-      bgImage: 'assets/images/bg/setgelbg.png',
-      remainingDays: '7',
-      price: 199000,
-      category: "Нэмэлт сургалт",
-      rate: 4,
-    ),
-    AudioLesson(
-      id: '4',
-      title: "хүсэл бүтээх хүч",
-      lessonName: 'Бясалгал 4',
-      lessonNumber: "Хичээл 4",
-      startTime: "09:00",
-      duration: Duration.zero,
-      audioPath:
-          'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3',
-      lessonDescription:
-          '12-р сарын 12-ны өглөө 06 цагт, орой 21 цагаас давтан хийнэ.',
-      image: 'assets/images/bg/huselsmall.png',
-      bgImage: 'assets/images/bg/setgelbg.png',
-      remainingDays: '12',
-      price: 0,
-      category: "Үнэгүй сургалт",
-      rate: 3.5,
-    ),
-    AudioLesson(
-      id: '5',
-      title: "мөнгөний мантра",
-      lessonName: 'Бясалгал 5',
-      lessonNumber: "Хичээл 5",
-      startTime: "10:00",
-      duration: Duration.zero,
-      audioPath:
-          'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-5.mp3',
-      lessonDescription:
-          '12-р сарын 15-ны өглөө 07 цагт, орой 20 цагаас давтан хийнэ.',
-      image: 'assets/images/bg/mongosmall.png',
-      bgImage: 'assets/images/bg/setgelbg.png',
-      remainingDays: '15',
-      price: 150000,
-      category: "Хөнгөлөлттэй сургалт",
-      endTime: DateTime.now().add(const Duration(days: 20)),
-      rate: 3,
-    ),
-  ];
 
   Timer? _countdownTimer;
 
@@ -132,33 +33,24 @@ class PageManager {
     _startCountdown();
   }
 
-  // <-- 2. Init & Playlist – AudioPlayer initialize, playlist set. -->
-  // AudioPlayer үүсгэх, playlist set хийх, listener-уудыг ажиллуулах.
   void _init() async {
     _audioPlayer = AudioPlayer();
-    await _loadDownloadedLessons();
     _setInitialPlaylist();
     _listenForChangesInPlayerState();
     _listenForChangesInPlayerPosition();
     _listenForChangesInBufferedPosition();
     _listenForChangesInTotalDuration();
     _listenForChangesInSequenceState();
-    _setInitialPlaylist(); // await устгасан - хоосон playlist AudioPlayer-д set хийхгүй болсон
+    _setInitialPlaylist();
 
-    assetsLessonsNotifier.value = _assetsLessons;
+    assetsLessonsNotifier.value = mockAudioLessons;
   }
 
-  // tag: lesson – AudioSource-д lesson объект холбож, дараа нь UI update-д ашиглана.
   Future<void> _setInitialPlaylist() async {
-    // Эхний playlist хоосон байна, AudioPlayer-д хоосон playlist set хийхгүй
     _playlist = ConcatenatingAudioSource(children: []);
-    // Хоосон playlist set хийхгүй - зөвхөн үүсгэх
   }
-
-  // <-- 3. Listeners – Player state, position, buffer, duration, sequence track update. -->
 
   void _listenForChangesInPlayerState() {
-    // Audio-ийн state-ийг UI-тэй синхрончилно.
     _audioPlayer.playerStateStream.listen((playerState) {
       final isPlaying = playerState.playing;
       final processingState = playerState.processingState;
@@ -177,7 +69,6 @@ class PageManager {
   }
 
   void _listenForChangesInPlayerPosition() {
-    // Одоогийн тоглосон хугацаа
     _audioPlayer.positionStream.listen((position) {
       final oldState = progressNotifier.value;
       progressNotifier.value = ProgressBarState(
@@ -189,7 +80,6 @@ class PageManager {
   }
 
   void _listenForChangesInBufferedPosition() {
-    // Buffer
     _audioPlayer.bufferedPositionStream.listen((bufferedPosition) {
       final oldState = progressNotifier.value;
       progressNotifier.value = ProgressBarState(
@@ -201,7 +91,6 @@ class PageManager {
   }
 
   void _listenForChangesInTotalDuration() {
-    // Total duration
     _audioPlayer.durationStream.listen((totalDuration) {
       final oldState = progressNotifier.value;
       final safeDuration = totalDuration ?? Duration.zero;
@@ -233,7 +122,6 @@ class PageManager {
   }
 
   void _listenForChangesInSequenceState() {
-    // Playlist-д тоглож буй дууг track хийж, Previous/Next button update.
     _audioPlayer.sequenceStateStream.listen((sequenceState) {
       final currentItem = sequenceState.currentSource;
       final lesson = currentItem?.tag as AudioLesson?;
@@ -254,8 +142,6 @@ class PageManager {
     });
   }
 
-  // <-- 4. Controls – Play/Pause, Next/Prev, Seek, Speed, Repeat, Download & Play. -->
-
   void play() async {
     _audioPlayer.play();
   }
@@ -273,7 +159,6 @@ class PageManager {
     _countdownTimer?.cancel();
   }
 
-  // Loop mode тохируулах
   void onRepeatButtonPressed() {
     repeatButtonNotifier.nextState();
     switch (repeatButtonNotifier.value) {
@@ -296,7 +181,6 @@ class PageManager {
     _audioPlayer.seekToNext();
   }
 
-  // // 1x → 2x → 3x → 1x
   void cycleSpeed() {
     double newSpeed;
     if (speedNotifier.value == 1.0) {
@@ -310,7 +194,6 @@ class PageManager {
     _audioPlayer.setSpeed(newSpeed);
   }
 
-  // Өмнөх 5 секунд рүү
   void rewind5Seconds() {
     final currentPosition = _audioPlayer.position;
     Duration newPosition;
@@ -324,7 +207,6 @@ class PageManager {
     _audioPlayer.seek(newPosition);
   }
 
-  // Дараах 10 секунд рүү
   void forward10Seconds() {
     final currentPosition = _audioPlayer.position;
     final totalDuration = _audioPlayer.duration ?? Duration.zero;
@@ -351,65 +233,33 @@ class PageManager {
 
   Future<void> downloadAndPlay(AudioLesson lesson) async {
     try {
-      final dir = await getApplicationDocumentsDirectory();
-      final file = File('${dir.path}/${lesson.lessonNumber}.mp3');
+      final localPath = await DownloadManager.downloadLesson(lesson);
+      await DownloadManager.saveLesson(lesson, localPath);
+      final updatedLessons = await DownloadManager.loadDownloadedLessons();
+      downloadedLessonsNotifier.value = updatedLessons;
 
-      // Хэрэв файл байхгүй бол татах
-      if (!await file.exists()) {
-        if (lesson.audioPath.startsWith('http')) {
-          final dio = Dio();
-          await dio.download(lesson.audioPath, file.path);
-        } else if (lesson.audioPath.startsWith('assets')) {
-          final byteData = await rootBundle.load(lesson.audioPath);
-          await file.writeAsBytes(byteData.buffer.asUint8List());
-        } else {
-          throw Exception("Алдаатай audioPath: ${lesson.audioPath}");
-        }
-      }
-
-      // SharedPreferences-д хадгалах
-      await _saveDownloadedLesson(lesson, file.path);
-      await _loadDownloadedLessons();
+      await _playLocalFile(localPath, lesson);
     } catch (e) {
-      print('Download болон тоглуулахад алдаа гарлаа: $e');
+      print("Download болон тоглуулахад алдаа: $e");
     }
   }
 
-  Future<void> _saveDownloadedLesson(
-    AudioLesson lesson,
-    String localPath,
-  ) async {
-    final prefs = await SharedPreferences.getInstance();
-    final downloads = prefs.getStringList('downloads') ?? [];
-
-    final newData = jsonEncode({
-      "title": lesson.title,
-      "lessonName": lesson.lessonName,
-      "lessonNumber": lesson.lessonNumber,
-      "startTime": lesson.startTime,
-      "duration": lesson.duration.inSeconds,
-      "audioPath": localPath,
-      "lessonDescription": lesson.lessonDescription,
-      "isLiked": lesson.isLiked,
-      "image": lesson.image,
-      "bgImage": lesson.bgImage,
-      "remainingDays": lesson.remainingDays,
-      "price": lesson.price,
-    });
-
-    // Давхардуулахгүй байхын тулд шалгана
-    if (!downloads.any(
-      (d) => jsonDecode(d)['lessonNumber'] == lesson.lessonNumber,
-    )) {
-      downloads.add(newData);
-      await prefs.setStringList('downloads', downloads);
-
-      // downloadedLessonsNotifier шинэчлэх
-      await _loadDownloadedLessons();
-    }
+  Future<void> refreshDownloads() async {
+    downloadedLessonsNotifier.value =
+        await DownloadManager.loadDownloadedLessons();
   }
 
-  // Download хийсэн lesson устгах
+  Future<void> deleteDownloadedLesson(AudioLesson lesson) async {
+    await DownloadManager.deleteLesson(lesson);
+    await refreshDownloads();
+  }
+
+  bool isLessonDownloaded(AudioLesson lesson) {
+    return downloadedLessonsNotifier.value.any(
+      (dl) => dl.lessonNumber == lesson.lessonNumber,
+    );
+  }
+
   Future<void> _playLocalFile(String filePath, AudioLesson lesson) async {
     final updatedLesson = AudioLesson(
       id: lesson.id,
@@ -436,59 +286,6 @@ class PageManager {
     _audioPlayer.play();
   }
 
-  Future<void> _loadDownloadedLessons() async {
-    final prefs = await SharedPreferences.getInstance();
-    final downloads = prefs.getStringList('downloads') ?? [];
-
-    final downloadedLessons = downloads.map((d) {
-      final json = jsonDecode(d);
-      return AudioLesson(
-        id: json['id'] ?? '',
-        title: json['title'] ?? '',
-        lessonName: json['lessonName'] ?? '',
-        lessonNumber: json['lessonNumber'] ?? '',
-        startTime: json['startTime'] ?? '',
-        duration: Duration(seconds: json['duration'] ?? 0),
-        audioPath: json['audioPath'] ?? '',
-        lessonDescription: json['lessonDescription'] ?? '',
-        isLiked: json['isLiked'] ?? false,
-        image: json['image'] ?? 'assets/images/default.png', // default image
-        bgImage: json['bgImage'] ?? 'assets/images/default_bg.png',
-        remainingDays: json['remainingDays'] ?? '',
-        price: json['price'] ?? 0,
-        category: json['category'] ?? '',
-      );
-    }).toList();
-
-    downloadedLessonsNotifier.value = downloadedLessons;
-  }
-
-  Future<void> deleteDownloadedLesson(AudioLesson lesson) async {
-    try {
-      final file = File(lesson.audioPath);
-      if (await file.exists()) await file.delete();
-
-      final prefs = await SharedPreferences.getInstance();
-      final downloads = prefs.getStringList('downloads') ?? [];
-      downloads.removeWhere(
-        (d) => jsonDecode(d)['lessonNumber'] == lesson.lessonNumber,
-      );
-      await prefs.setStringList('downloads', downloads);
-
-      // downloadedLessonsNotifier-ийг шинэчлэх
-      await _loadDownloadedLessons();
-
-      // Хэрэв одоо тоглож буй lesson устгагдсан бол зогсоох
-      if (currentLessonNotifier.value?.lessonNumber == lesson.lessonNumber) {
-        await _audioPlayer.stop();
-        currentLessonNotifier.value = null;
-      }
-    } catch (e) {
-      print('Файл устгахад алдаа гарлаа: $e');
-    }
-  }
-
-  // Assets файлыг тоглуулах
   Future<void> playAssetLesson(AudioLesson lesson) async {
     try {
       await _audioPlayer.stop();
@@ -502,20 +299,12 @@ class PageManager {
     }
   }
 
-  // Download хийгдсэн файлыг тоглуулах
   Future<void> playDownloadedLesson(AudioLesson lesson) async {
     try {
       await _playLocalFile(lesson.audioPath, lesson);
     } catch (e) {
       print('Download хийгдсэн файл тоглуулахад алдаа гарлаа: $e');
     }
-  }
-
-  // Lesson download хийгдсэн эсэхийг шалгах
-  bool isLessonDownloaded(AudioLesson lesson) {
-    return downloadedLessonsNotifier.value.any(
-      (dl) => dl.lessonNumber == lesson.lessonNumber,
-    );
   }
 
   List<AudioLesson> get filteredLessons {
@@ -544,11 +333,8 @@ class PageManager {
   }
 
   void _startCountdown() {
-    // 1 секунд тутам update хийнэ
     _countdownTimer = Timer.periodic(Duration(seconds: 1), (_) {
       final now = DateTime.now();
-
-      // Assets болон downloaded lessons
       final allLessons =
           assetsLessonsNotifier.value + downloadedLessonsNotifier.value;
 
@@ -570,29 +356,6 @@ class PageManager {
 
   ValueNotifier<Duration>? getCountdownNotifier(String lessonNumber) {
     return countdownNotifiers[lessonNumber];
-  }
-
-  static String formatDurationDaysHours(Duration d) {
-    final days = d.inDays;
-    final hours = d.inHours % 24;
-    return '${days} хоног : ${hours} цаг';
-  }
-
-  // Format Duration → String
-  static String formatDuration(Duration d) {
-    final days = d.inDays;
-    final hours = d.inHours % 24;
-    final minutes = d.inMinutes % 60;
-    final seconds = d.inSeconds % 60;
-    return '${days} өдөр : ${hours} цаг : ${minutes} мин : ${seconds} : сек';
-  }
-
-  static String formatDurations(Duration duration) {
-    String twoDigits(int n) => n.toString().padLeft(2, '0');
-    final hours = twoDigits(duration.inHours.remainder(12));
-    final minutes = twoDigits(duration.inMinutes.remainder(60));
-    final seconds = twoDigits(duration.inSeconds.remainder(60));
-    return "$hours:$minutes:$seconds";
   }
 
   Future<void> playNetworkLesson(AudioLesson lesson) async {

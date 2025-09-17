@@ -1,3 +1,4 @@
+import 'package:audio_app_2/common/screens_header.dart';
 import 'package:audio_app_2/screens/notifaction/widgets/notification_card.dart';
 import 'package:audio_app_2/services/notification_service.dart';
 import 'package:flutter/material.dart';
@@ -10,44 +11,7 @@ class NotificationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xFFf2f5f7),
-      appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(kToolbarHeight + 20),
-        child: Container(
-          decoration: const BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.only(
-              bottomLeft: Radius.circular(20),
-              bottomRight: Radius.circular(20),
-            ),
-          ),
-          child: SafeArea(
-            child: Padding(
-              padding: const EdgeInsets.only(left: 20, bottom: 10),
-              child: Row(
-                children: [
-                  IconButton(
-                    onPressed: () => Navigator.pop(context),
-                    icon: Image.asset(
-                      'assets/images/left.png',
-                      width: 30,
-                      height: 30,
-                    ),
-                  ),
-                  const SizedBox(width: 10),
-                  const Text(
-                    'Мэдэгдэл',
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      color: Color(0xFF33547D),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ),
-      ),
+      appBar: ScreensHeader(text: 'Мэдэгдэл'),
       body: ValueListenableBuilder(
         valueListenable: _notificationService.notifications,
         builder: (context, notifications, _) {
