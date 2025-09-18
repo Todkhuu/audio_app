@@ -21,6 +21,29 @@ class AuthManager extends ChangeNotifier {
     notifyListeners();
   }
 
+  // Mock хэрэглэгчид
+  final List<User> mockUsers = [
+    User(
+      name: 'Бадамгарав',
+      email: 'badamgarav@example.com',
+      phone: '12312312',
+      phones: '+97699123456',
+      birthDate: DateTime(1995, 5, 12),
+      identifier: 'badamgarav@example.com',
+      password: '123123',
+      code: '',
+    ),
+    User(
+      name: 'Солонго',
+      email: 'solongo@example.com',
+      phone: '+97699234567',
+      birthDate: DateTime(1998, 8, 21),
+      identifier: 'solongo@example.com',
+      password: 'abcdef',
+      code: '',
+    ),
+  ];
+
   // 4 оронтой код илгээх simulation (signup-д)
   Future<void> sendCode(String phone) async {
     _isLoading = true;

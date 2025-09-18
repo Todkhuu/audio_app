@@ -1,7 +1,21 @@
 class User {
-  final String identifier; // email эсвэл phone
+  final String? name;
+  final String? email;
+  final String? phone;
+  final DateTime? birthDate;
+  final String identifier;
   final String password;
-  final String code;
+  final String? code;
+  final String? phones;
 
-  User({required this.identifier, required this.password, required this.code});
+  User({
+    this.name,
+    this.email,
+    this.phone,
+    this.birthDate,
+    required this.identifier,
+    required this.password,
+    this.code,
+    this.phones,
+  });
 }
