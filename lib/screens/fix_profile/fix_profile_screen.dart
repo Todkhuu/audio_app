@@ -1,6 +1,8 @@
 import 'package:audio_app_2/common/screens_header.dart';
 import 'package:audio_app_2/managers/auth_manager.dart';
 import 'package:audio_app_2/models/user_model.dart';
+import 'package:audio_app_2/screens/fix_profile/widgets/birth_date_picker.dart';
+import 'package:audio_app_2/screens/fix_profile/widgets/build_text_field.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -43,7 +45,6 @@ class _FixProfileScreenState extends State<FixProfileScreen> {
 
   void _saveProfile(AuthManager authManager) {
     if (_formKey.currentState!.validate()) {
-      // Жишээ: authManager.updateUser(...) гэх мэтээр хадгалах логик
       print('Name: ${_nameController.text}');
       print('Birth: ${_birthController.text}');
       print('Email: ${_emailController.text}');
@@ -68,7 +69,7 @@ class _FixProfileScreenState extends State<FixProfileScreen> {
           child: IntrinsicHeight(
             child: Column(
               children: [
-                _buildTextField(
+                BuildTextField(
                   controller: _nameController,
                   label: 'Хэрэглэгчийн нэр',
                   validator: (value) => value == null || value.isEmpty
@@ -76,7 +77,7 @@ class _FixProfileScreenState extends State<FixProfileScreen> {
                       : null,
                 ),
                 const SizedBox(height: 15),
-                _buildTextField(
+                BuildTextField(
                   controller: _birthController,
                   label: 'Төрсөн өдөр',
                   validator: (value) {
@@ -89,9 +90,11 @@ class _FixProfileScreenState extends State<FixProfileScreen> {
                     }
                     return null;
                   },
+                  onTap: () => _pickBirthDate(context),
+                  readOnly: true,
                 ),
                 const SizedBox(height: 15),
-                _buildTextField(
+                BuildTextField(
                   controller: _emailController,
                   label: 'Цахим хаяг',
                   validator: (value) {
@@ -106,7 +109,7 @@ class _FixProfileScreenState extends State<FixProfileScreen> {
                   },
                 ),
                 const SizedBox(height: 15),
-                _buildTextField(
+                BuildTextField(
                   controller: _phoneController,
                   label: 'Утасны дугаар',
                   validator: (value) {
@@ -157,34 +160,30 @@ class _FixProfileScreenState extends State<FixProfileScreen> {
     );
   }
 
-  Widget _buildTextField({
-    required TextEditingController controller,
-    required String label,
-    String? Function(String?)? validator,
-  }) {
-    return TextFormField(
-      controller: controller,
-      style: const TextStyle(
-        fontSize: 14,
-        color: Color(0xFF33547D),
-        fontWeight: FontWeight.w600,
+  String _formatAsDisplay(DateTime dt) {
+    return '${dt.day.toString().padLeft(2, '0')}-${dt.month.toString().padLeft(2, '0')}-${dt.year}';
+  }
+
+  void _pickBirthDate(BuildContext context) {
+    showModalBottomSheet(
+      backgroundColor: Colors.white,
+      isScrollControlled: true,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      decoration: InputDecoration(
-        labelText: label,
-        labelStyle: const TextStyle(
-          color: Color(0xFFA9B0BB),
-          fontSize: 12,
-          fontWeight: FontWeight.w600,
-        ),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(15),
-          borderSide: BorderSide.none,
-        ),
-        filled: true,
-        fillColor: Colors.white,
-        contentPadding: const EdgeInsets.only(left: 15, top: 16, bottom: 16),
-      ),
-      validator: validator,
+      context: context,
+      builder: (context) {
+        return BirthDatePicker(
+          initialDate: _birthController.text.isNotEmpty
+              ? DateTime.tryParse(_birthController.text)
+              : null,
+          onDateSelected: (birthDate) {
+            setState(() {
+              _birthController.text = _formatAsDisplay(birthDate);
+            });
+          },
+        );
+      },
     );
   }
 }
