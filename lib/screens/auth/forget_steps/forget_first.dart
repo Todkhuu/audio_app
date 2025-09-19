@@ -1,6 +1,7 @@
+import 'package:audio_app_2/screens/auth/forget_steps/forget_first/country_phone_selector.dart';
+import 'package:audio_app_2/screens/auth/forget_steps/widgets/forget_header.dart';
 import 'package:audio_app_2/utils/input_decoration_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:intl_phone_field/intl_phone_field.dart';
 import 'package:audio_app_2/utils/validators.dart';
 
 class ForgetFirst extends StatelessWidget {
@@ -15,54 +16,28 @@ class ForgetFirst extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text(
-            'Нууц үг сэргээх',
-            style: TextStyle(
-              fontWeight: FontWeight.w600,
-              fontSize: 14,
-              color: Color(0xFF33547D),
-            ),
-          ),
-          SizedBox(height: 25),
-          Text(
-            'Та өөрийн бүртгэлтэй утасны дугаараа оруулна уу',
-            style: TextStyle(
-              fontWeight: FontWeight.w400,
-              fontSize: 12,
-              color: Color(0xFF33547D),
-              height: 17 / 14,
-            ),
+          ForgetHeader(
+            text: 'Нууц үг сэргээх',
+            text2: 'Та өөрийн бүртгэлтэй утасны дугаараа оруулна уу',
           ),
           SizedBox(height: 26),
           Form(
             key: formKey,
             child: Row(
               children: [
-                // УЛСЫН КОД
                 Container(
-                  width: 116,
+                  width: 105,
                   height: 55,
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(15),
                   ),
-                  child: IntlPhoneField(
-                    showDropdownIcon: false,
-                    showCountryFlag: true,
-                    disableLengthCheck: true,
-                    initialCountryCode: 'MN',
-                    onChanged: (phone) {
-                      print(phone.completeNumber);
-                    },
-                    decoration: InputDecoration(
-                      border: OutlineInputBorder(borderSide: BorderSide.none),
-                    ),
-                  ),
+                  padding: const EdgeInsets.only(left: 10),
+                  child: CountryPhoneSelector(),
                 ),
 
                 SizedBox(width: 10),
 
-                // УТАСНЫ ДУГААР
                 Expanded(
                   child: TextFormField(
                     keyboardType: TextInputType.phone,

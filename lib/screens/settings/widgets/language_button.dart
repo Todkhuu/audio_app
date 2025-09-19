@@ -42,7 +42,7 @@ class LanguageButton extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 9),
-                Image.asset('assets/images/settings/flag.png', width: 20),
+                Image.asset('assets/images/flag/usa.png', width: 20),
               ],
             ),
           ),

@@ -1,3 +1,4 @@
+import 'package:audio_app_2/screens/auth/forget_steps/widgets/forget_header.dart';
 import 'package:flutter/material.dart';
 import 'package:audio_app_2/utils/validators.dart';
 
@@ -22,23 +23,9 @@ class ForgetThirdState extends State<ForgetThird> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const SizedBox(height: 63),
-        Text(
-          'Шинэ нууц үг оруулах',
-          style: TextStyle(
-            fontWeight: FontWeight.w600,
-            fontSize: 14,
-            color: Color(0xFF33547D),
-          ),
-        ),
-        SizedBox(height: 25),
-        Text(
-          'Цаашид нэвтэрч орохдоо ашиглах нууц үгээ оруулна уу',
-          style: TextStyle(
-            fontWeight: FontWeight.w400,
-            fontSize: 12,
-            color: Color(0xFF33547D),
-            height: 17 / 14,
-          ),
+        ForgetHeader(
+          text: 'Шинэ нууц үг оруулах',
+          text2: 'Цаашид нэвтэрч орохдоо ашиглах нууц үгээ оруулна уу',
         ),
         SizedBox(height: 26),
         Form(

@@ -22,7 +22,7 @@ class LessonsList extends StatelessWidget {
       return LessonsEmptyStateWidget(categoryName: controller.selectedCategory);
     }
     return ListView.builder(
-      padding: const EdgeInsets.only(left: 20, top: 15, right: 20),
+      padding: const EdgeInsets.only(left: 20, top: 10, right: 20),
       itemCount: lessons.length,
       itemBuilder: (context, index) {
         final lesson = lessons[index];

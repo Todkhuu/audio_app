@@ -1,4 +1,5 @@
 import 'package:audio_app_2/managers/auth_manager.dart';
+import 'package:audio_app_2/managers/country_manager.dart';
 import 'package:audio_app_2/screens/auth/login_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -7,7 +8,10 @@ import 'package:provider/provider.dart';
 void main() {
   runApp(
     MultiProvider(
-      providers: [ChangeNotifierProvider(create: (_) => AuthManager())],
+      providers: [
+        ChangeNotifierProvider(create: (_) => AuthManager()),
+        ChangeNotifierProvider(create: (_) => CountryManager()),
+      ],
       child: const MyApp(),
     ),
   );

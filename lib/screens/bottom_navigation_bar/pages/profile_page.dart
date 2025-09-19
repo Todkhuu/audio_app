@@ -16,12 +16,11 @@ class ProfilePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final PageManager pageManager = PageManager();
-    final authManager = context.watch<AuthManager>();
-    final user = authManager.user;
+    final user = context.read<AuthManager>().mockUsers[0];
 
-    if (user == null) {
-      return const Center(child: Text('Хэрэглэгчийн мэдээлэл алга байна'));
-    }
+    // if (user == null) {
+    //   return const Center(child: Text('Хэрэглэгчийн мэдээлэл алга байна'));
+    // }
     return Scaffold(
       appBar: ScreensHeader(text: 'Миний'),
       body: Padding(
