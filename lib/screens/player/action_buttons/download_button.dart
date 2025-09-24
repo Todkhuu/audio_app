@@ -30,12 +30,6 @@ class DownloadButton extends StatelessWidget {
                 ? null
                 : () async {
                     await pageManager.downloadAndPlay(lesson);
-
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text("Аудио татагдаж хадгалагдлаа ✅"),
-                      ),
-                    );
                   },
             icon: ColorFiltered(
               colorFilter: ColorFilter.mode(

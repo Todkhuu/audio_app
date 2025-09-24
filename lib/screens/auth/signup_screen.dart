@@ -3,8 +3,8 @@ import 'package:audio_app_2/screens/auth/signup_steps/signup_first.dart';
 import 'package:audio_app_2/screens/auth/signup_steps/signup_fourth.dart';
 import 'package:audio_app_2/screens/auth/signup_steps/signup_second.dart';
 import 'package:audio_app_2/screens/auth/signup_steps/signup_third.dart';
-import 'package:audio_app_2/screens/auth/widgets/next_screen.dart';
 import 'package:audio_app_2/screens/auth/widgets/step_header.dart';
+import 'package:audio_app_2/screens/success_register/success_register_screen.dart';
 import 'package:flutter/material.dart';
 
 class SignupScreen extends StatefulWidget {
@@ -128,7 +128,8 @@ class SignupScreenState extends State<SignupScreen> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => NextScreen(),
+                                    builder: (context) =>
+                                        SuccessRegisterScreen(),
                                   ),
                                 );
                               }
@@ -138,11 +139,11 @@ class SignupScreenState extends State<SignupScreen> {
                             currentStep == 1
                                 ? 'Үргэлжлүүлэх'
                                 : currentStep == 2
-                                ? ''
+                                ? 'Баталгаажуулах'
                                 : currentStep == 3
                                 ? 'Код оруулах'
                                 : currentStep == 4
-                                ? ''
+                                ? 'Баталгаажуулах'
                                 : 'Үргэлжлүүлэх',
                             style: TextStyle(
                               fontWeight: FontWeight.w600,

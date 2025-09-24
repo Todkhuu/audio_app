@@ -32,56 +32,24 @@ class DownloadManager {
     final prefs = await SharedPreferences.getInstance();
     final downloads = prefs.getStringList(_storageKey) ?? [];
 
-    final newData = jsonEncode({
-      "id": lesson.id,
-      "title": lesson.title,
-      "lessonName": lesson.lessonName,
-      "lessonNumber": lesson.lessonNumber,
-      "startTime": lesson.startTime,
-      "duration": lesson.duration.inSeconds,
-      "audioPath": localPath,
-      "lessonDescription": lesson.lessonDescription,
-      "isLiked": lesson.isLiked,
-      "image": lesson.image,
-      "bgImage": lesson.bgImage,
-      "remainingDays": lesson.remainingDays,
-      "price": lesson.price,
-      "category": lesson.category,
-    });
+    final newData = jsonEncode(lesson.toJson());
 
-    // Давхардахгүй бол хадгална
     if (!downloads.any(
-      (d) => jsonDecode(d)['lessonNumber'] == lesson.lessonNumber,
+      (d) =>
+          AudioLesson.fromJson(jsonDecode(d)).lessonNumber ==
+          lesson.lessonNumber,
     )) {
       downloads.add(newData);
       await prefs.setStringList(_storageKey, downloads);
     }
   }
 
-  // Татсан жагсаалт дуудах
+  // Татсан жагсаалт
   static Future<List<AudioLesson>> loadDownloadedLessons() async {
     final prefs = await SharedPreferences.getInstance();
     final downloads = prefs.getStringList(_storageKey) ?? [];
 
-    return downloads.map((d) {
-      final json = jsonDecode(d);
-      return AudioLesson(
-        id: json['id'] ?? '',
-        title: json['title'] ?? '',
-        lessonName: json['lessonName'] ?? '',
-        lessonNumber: json['lessonNumber'] ?? '',
-        startTime: json['startTime'] ?? '',
-        duration: Duration(seconds: json['duration'] ?? 0),
-        audioPath: json['audioPath'] ?? '',
-        lessonDescription: json['lessonDescription'] ?? '',
-        isLiked: json['isLiked'] ?? false,
-        image: json['image'] ?? 'assets/images/default.png',
-        bgImage: json['bgImage'] ?? 'assets/images/default_bg.png',
-        remainingDays: json['remainingDays'] ?? '',
-        price: json['price'] ?? 0,
-        category: json['category'] ?? '',
-      );
-    }).toList();
+    return downloads.map((d) => AudioLesson.fromJson(jsonDecode(d))).toList();
   }
 
   // Устгах

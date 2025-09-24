@@ -1,11 +1,127 @@
+import 'package:audio_app_2/screens/auth/forget_steps/widgets/forget_header.dart';
+import 'package:audio_app_2/screens/auth/signup_steps/fifth/info_tile.dart';
+import 'package:audio_app_2/utils/validators.dart';
 import 'package:flutter/material.dart';
 
-class SignupFifth extends StatelessWidget {
+class SignupFifth extends StatefulWidget {
   const SignupFifth({super.key, required this.formKey});
   final GlobalKey<FormState> formKey;
 
   @override
+  State<SignupFifth> createState() => _SignupFifthState();
+}
+
+class _SignupFifthState extends State<SignupFifth> {
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmController = TextEditingController();
+
+  bool _obscurePassword = true;
+  final bool _obscureConfirm = true;
+
+  @override
   Widget build(BuildContext context) {
-    return Column();
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const SizedBox(height: 48),
+        ForgetHeader(
+          text: 'Шинэ нууц үг оруулах',
+          text2: 'Цаашид нэвтэрч орохдоо ашиглах нууц үгээ оруулна уу',
+        ),
+        SizedBox(height: 26),
+        Form(
+          key: widget.formKey,
+          child: Column(
+            children: [
+              TextFormField(
+                controller: _passwordController,
+                decoration: InputDecoration(
+                  labelText: 'Шинэ нууц үг',
+                  labelStyle: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 14,
+                    color: Color(0xFFA9B0BB),
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: BorderSide.none,
+                  ),
+                  filled: true,
+                  fillColor: Colors.white,
+                  contentPadding: const EdgeInsets.only(
+                    left: 15,
+                    top: 16,
+                    bottom: 16,
+                  ),
+                  suffixIconColor: Color(0xFF33547D),
+                  suffixIcon: IconButton(
+                    icon: Icon(
+                      _obscurePassword
+                          ? Icons.visibility_off
+                          : Icons.visibility,
+                    ),
+                    onPressed: () {
+                      setState(() {
+                        _obscurePassword = !_obscurePassword;
+                      });
+                    },
+                  ),
+                ),
+                obscureText: _obscurePassword,
+                validator: (value) {
+                  return Validators.validatePassword(value);
+                },
+              ),
+
+              SizedBox(height: 16),
+              TextFormField(
+                controller: _confirmController,
+                decoration: InputDecoration(
+                  labelText: 'Шинэ нууц үг давтах',
+                  labelStyle: TextStyle(
+                    fontWeight: FontWeight.w400,
+                    fontSize: 14,
+                    color: Color(0xFFA9B0BB),
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(15),
+                    borderSide: BorderSide.none,
+                  ),
+                  filled: true,
+                  fillColor: Colors.white,
+                  contentPadding: const EdgeInsets.only(
+                    left: 15,
+                    top: 16,
+                    bottom: 16,
+                  ),
+                ),
+                obscureText: _obscureConfirm,
+                validator: (value) {
+                  if (value == null || value.isEmpty) {
+                    return 'Нууц үг давтах хоосон байна';
+                  }
+                  if (value != _passwordController.text) {
+                    return 'Нууц үг таарахгүй байна';
+                  }
+                  return null;
+                },
+              ),
+            ],
+          ),
+        ),
+        Spacer(),
+        InfoTile(
+          imagePath: 'assets/images/signup/phone.png',
+          title: '+976 99396017',
+        ),
+        const SizedBox(height: 15),
+        InfoTile(
+          imagePath: 'assets/images/signup/fb.png',
+          title: 'Бадамгарав М.',
+          subtitle: 'Таны Facebook хаяг',
+        ),
+        const SizedBox(height: 35),
+      ],
+    );
   }
 }

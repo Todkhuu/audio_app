@@ -1,8 +1,8 @@
 import 'package:audio_app_2/screens/auth/forget_steps/forget_first.dart';
 import 'package:audio_app_2/screens/auth/forget_steps/forget_second.dart';
 import 'package:audio_app_2/screens/auth/forget_steps/forget_third.dart';
-import 'package:audio_app_2/screens/auth/widgets/next_screen.dart';
 import 'package:audio_app_2/screens/auth/widgets/step_header.dart';
+import 'package:audio_app_2/screens/success_change_password/success_change_password_screen.dart';
 import 'package:flutter/material.dart';
 
 class ForgetScreen extends StatefulWidget {
@@ -122,7 +122,8 @@ class ForgetScreenState extends State<ForgetScreen> {
                                 Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                    builder: (context) => NextScreen(),
+                                    builder: (context) =>
+                                        SuccessChangePasswordScreen(),
                                   ),
                                 );
                               }
