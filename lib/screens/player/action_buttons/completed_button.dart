@@ -6,8 +6,8 @@ class CompletedButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 88,
-      height: 60,
+      width: 75,
+      height: 55,
       decoration: BoxDecoration(
         border: Border.all(width: 2, color: Colors.grey[200]!),
         borderRadius: BorderRadius.circular(15),

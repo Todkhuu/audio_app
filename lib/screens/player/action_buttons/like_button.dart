@@ -13,8 +13,8 @@ class LikeButton extends StatelessWidget {
       builder: (context, lesson, _) {
         final isLiked = lesson?.isLiked ?? true;
         return Container(
-          width: 88,
-          height: 60,
+          width: 75,
+          height: 55,
           decoration: BoxDecoration(
             border: Border.all(width: 2, color: Colors.grey[200]!),
             borderRadius: BorderRadius.circular(15),

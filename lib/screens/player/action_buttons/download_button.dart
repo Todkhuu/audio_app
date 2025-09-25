@@ -19,8 +19,8 @@ class DownloadButton extends StatelessWidget {
         final isDownloaded = pageManager.isLessonDownloaded(lesson);
 
         return Container(
-          width: 88,
-          height: 60,
+          width: 75,
+          height: 55,
           decoration: BoxDecoration(
             border: Border.all(width: 2, color: Colors.grey[200]!),
             borderRadius: BorderRadius.circular(15),

@@ -17,7 +17,7 @@ class _CategoriesRowWithSearchState extends State<CategoriesRowWithSearch> {
   @override
   Widget build(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
-    final searchWidth = _isSearching ? screenWidth - 180.0 : 0.0;
+    final searchWidth = _isSearching ? screenWidth - 170.0 : 0.0;
 
     return Padding(
       padding: const EdgeInsets.only(top: 15, left: 20, right: 20),
@@ -34,7 +34,12 @@ class _CategoriesRowWithSearchState extends State<CategoriesRowWithSearch> {
               height: 35,
               decoration: BoxDecoration(
                 color: Colors.white,
-                borderRadius: BorderRadius.circular(12),
+                borderRadius: _isSearching
+                    ? BorderRadius.only(
+                        topLeft: Radius.circular(12),
+                        bottomLeft: Radius.circular(12),
+                      )
+                    : BorderRadius.circular(12),
               ),
               alignment: Alignment.center,
               child: Image.asset(
@@ -45,8 +50,7 @@ class _CategoriesRowWithSearchState extends State<CategoriesRowWithSearch> {
               ),
             ),
           ),
-
-          const SizedBox(width: 10),
+          SizedBox(width: _isSearching ? 0.0 : 10.0),
           // Animated search input
           Padding(
             padding: EdgeInsets.only(right: _isSearching ? 10.0 : 0.0),
@@ -70,7 +74,10 @@ class _CategoriesRowWithSearchState extends State<CategoriesRowWithSearch> {
                         fillColor: Colors.white,
                         filled: true,
                         border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.only(
+                            topRight: Radius.circular(12),
+                            bottomRight: Radius.circular(12),
+                          ),
                           borderSide: BorderSide.none,
                         ),
                       ),
