@@ -1,3 +1,4 @@
+import 'package:audio_app_2/utils/show_dialog_update.dart';
 import 'package:flutter/material.dart';
 
 class NewsPage extends StatelessWidget {
@@ -5,6 +6,6 @@ class NewsPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold();
+    return Scaffold(body: ShowDialogUpdate());
   }
 }
