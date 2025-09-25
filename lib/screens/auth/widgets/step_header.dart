@@ -4,12 +4,14 @@ class StepHeader extends StatelessWidget {
   final int currentStep;
   final int totalSteps;
   final VoidCallback? onBackPressed;
+  final String text;
 
   const StepHeader({
     super.key,
     required this.currentStep,
     required this.totalSteps,
     this.onBackPressed,
+    required this.text,
   });
 
   @override
@@ -56,13 +58,14 @@ class StepHeader extends StatelessWidget {
                       child: Column(
                         children: [
                           Text(
-                            "Алхам",
+                            text,
                             style: const TextStyle(
                               fontSize: 12,
                               fontWeight: FontWeight.w600,
                               color: Color(0xFF33547D),
                             ),
                           ),
+                          const SizedBox(height: 4),
                           Container(
                             width: 18,
                             height: 18,

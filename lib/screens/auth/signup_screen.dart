@@ -57,6 +57,7 @@ class SignupScreenState extends State<SignupScreen> {
                           );
                         }
                       : null,
+                  text: 'Алхам',
                 );
               },
             ),

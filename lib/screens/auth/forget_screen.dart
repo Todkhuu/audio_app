@@ -53,6 +53,7 @@ class ForgetScreenState extends State<ForgetScreen> {
                           );
                         }
                       : null,
+                  text: 'Алхам',
                 );
               },
             ),
