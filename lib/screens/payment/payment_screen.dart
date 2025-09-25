@@ -15,16 +15,12 @@ class PaymentScreen extends StatelessWidget {
       body: DefaultTabController(
         length: 2,
         child: Container(
-          padding: const EdgeInsets.only(
-            left: 20,
-            top: 15,
-            bottom: 15,
-            right: 20,
-          ),
+          padding: const EdgeInsets.only(top: 15),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
+                margin: const EdgeInsets.only(left: 20),
                 decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.circular(14),
@@ -39,7 +35,6 @@ class PaymentScreen extends StatelessWidget {
                     labelStyle: TextStyle(
                       fontWeight: FontWeight.w600,
                       fontSize: 12,
-                      height: 25 / 14,
                     ),
                     indicator: BoxDecoration(
                       color: Color(0xFF33547D),
