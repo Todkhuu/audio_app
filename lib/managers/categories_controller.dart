@@ -76,28 +76,31 @@ class CategoriesController extends ChangeNotifier {
     pageManager.downloadedLessonsNotifier.removeListener(_onLessonsChanged);
     super.dispose();
   }
-}
-
 
   // Search
-  // void searchLessons(String query) {
-  //   final lower = query.toLowerCase().trim();
-  //   if (lower.isEmpty) {
-  //     _searchResults.clear();
-  //     notifyListeners();
-  //     return;
-  //   }
+  void filterCategory(String query) {
+    final lower = query.toLowerCase().trim();
 
-  //   final allLessons = [
-  //     ...pageManager.assetsLessonsNotifier.value,
-  //     ...pageManager.downloadedLessonsNotifier.value,
-  //   ];
+    if (lower.isEmpty) {
+      // Хоосон query бол selected category-д тулгуурлан lessons харуулна
+      _updateFilteredLessons();
+      _searchResults.clear();
+    } else {
+      final allLessons = [
+        ...pageManager.assetsLessonsNotifier.value,
+        ...pageManager.downloadedLessonsNotifier.value,
+      ];
 
-  //   _searchResults = allLessons.where((lesson) {
-  //     return lesson.title.toLowerCase().contains(lower) ||
-  //         lesson.category.toLowerCase().contains(lower) ||
-  //         lesson.lessonDescription.toLowerCase().contains(lower);
-  //   }).toList();
+      _searchResults = allLessons.where((lesson) {
+        return lesson.title.toLowerCase().contains(lower) ||
+            lesson.category.toLowerCase().contains(lower) ||
+            lesson.lessonDescription.toLowerCase().contains(lower);
+      }).toList();
 
-  //   notifyListeners();
-  // }
+      // search үр дүнг filteredLessons болгож харагдуулна
+      _filteredLessons = _searchResults;
+    }
+
+    notifyListeners();
+  }
+}

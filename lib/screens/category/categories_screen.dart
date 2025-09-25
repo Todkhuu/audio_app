@@ -1,5 +1,5 @@
 import 'package:audio_app_2/common/screens_header.dart';
-import 'package:audio_app_2/screens/category/widgets/categories_row.dart';
+import 'package:audio_app_2/screens/category/widgets/categories_row_with_search.dart';
 import 'package:audio_app_2/screens/category/widgets/lessons_list.dart';
 import 'package:flutter/material.dart';
 import 'package:audio_app_2/managers/page_manager.dart';
@@ -48,7 +48,7 @@ class _CategoriesScreenState extends State<CategoriesScreen>
         builder: (context, child) {
           return Column(
             children: [
-              CategoriesRow(controller: controller),
+              CategoriesRowWithSearch(controller: controller),
               Expanded(
                 child: LessonsList(
                   controller: controller,
