@@ -24,20 +24,19 @@ class ForgetFirst extends StatelessWidget {
           Form(
             key: formKey,
             child: Row(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
-                  width: 105,
                   height: 55,
+                  width: 105,
+                  padding: const EdgeInsets.only(left: 10),
                   decoration: BoxDecoration(
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(15),
                   ),
-                  padding: const EdgeInsets.only(left: 10),
-                  child: CountryPhoneSelector(),
+                  child: Center(child: CountryPhoneSelector()),
                 ),
-
-                SizedBox(width: 10),
-
+                const SizedBox(width: 10),
                 Expanded(
                   child: TextFormField(
                     keyboardType: TextInputType.phone,

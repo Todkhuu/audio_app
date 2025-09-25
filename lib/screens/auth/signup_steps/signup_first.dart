@@ -25,6 +25,7 @@ class SignupFirst extends StatelessWidget {
         Form(
           key: formKey,
           child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Container(
                 width: 105,
